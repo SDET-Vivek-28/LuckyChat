@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .chat-bubble {
+    @apply rounded-2xl px-4 py-3 max-w-xs md:max-w-md lg:max-w-lg;
+  }
+  
+  .user-bubble {
+    @apply bg-lucky-500 text-white ml-auto;
+  }
+  
+  .lucky-bubble {
+    @apply bg-gray-100 text-gray-800 mr-auto;
+  }
+  
+  .typing-indicator {
+    @apply flex space-x-1 p-3;
+  }
+  
+  .typing-dot {
+    @apply w-2 h-2 bg-lucky-400 rounded-full animate-pulse;
+  }
+  
+  .paw-print {
+    @apply text-lucky-500 text-2xl animate-bounce-slow;
+  }
+  
+  .lucky-avatar {
+    @apply w-12 h-12 rounded-full bg-lucky-500 flex items-center justify-center text-white font-bold text-lg;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, #fef7e6 0%, #fdecc3 100%);
+  }
+} 
