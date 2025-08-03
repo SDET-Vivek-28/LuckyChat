@@ -6,6 +6,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export type SubscriptionTier = 'free' | 'basic' | 'pro' | 'enterprise'
+
 interface SubscriptionPlan {
   id: string
   name: string
@@ -23,6 +25,10 @@ interface SubscriptionState {
   incrementMessageCount: () => void
   getCurrentPlan: () => SubscriptionPlan | undefined
   upgradePlan: (planId: string) => void
+  // Add methods for PricingModal
+  currentTier: SubscriptionTier
+  upgradeTier: (tier: SubscriptionTier) => void
+  getAllPlans: () => SubscriptionPlan[]
 }
 
 export const useSubscriptionStore = create<SubscriptionState>()(
@@ -76,7 +82,13 @@ export const useSubscriptionStore = create<SubscriptionState>()(
         const state = get()
         return state.plans.find(p => p.id === state.currentPlan)
       },
-      upgradePlan: (planId) => set({ currentPlan: planId })
+      upgradePlan: (planId) => set({ currentPlan: planId }),
+      // Add methods for PricingModal
+      get currentTier() {
+        return get().currentPlan as SubscriptionTier
+      },
+      upgradeTier: (tier: SubscriptionTier) => set({ currentPlan: tier }),
+      getAllPlans: () => get().plans
     }),
     {
       name: 'lucky-subscription-storage'
