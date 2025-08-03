@@ -101,52 +101,45 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
                       {getTierIcon(plan.id)}
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">{plan.name}</h3>
-                    <div className="mb-4">
-                      <span className="text-3xl font-bold text-gray-800">${plan.price}</span>
-                      <span className="text-gray-600">/month</span>
+                    <div className="text-3xl font-bold text-lucky-600 mb-1">
+                      ${plan.price}
+                      <span className="text-sm font-normal text-gray-500">/month</span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                      {plan.messagesPerMonth.toLocaleString()} messages/month
-                    </p>
+                    <p className="text-sm text-gray-600 mb-4">{plan.messagesPerMonth.toLocaleString()} messages/month</p>
                   </div>
 
-                  <ul className="space-y-3 mb-6">
+                  {/* Features */}
+                  <div className="space-y-3 mb-6">
                     {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center space-x-3">
-                        <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700">{feature}</span>
-                      </li>
+                      <div key={index} className="flex items-center text-sm">
+                        <Check className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
 
+                  {/* Action Button */}
                   <button
                     onClick={() => handleUpgrade(plan.id)}
-                    disabled={currentTier === plan.id || selectedTier === plan.id}
-                    className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                    disabled={selectedTier === plan.id}
+                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
                       currentTier === plan.id
-                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
                         : selectedTier === plan.id
-                        ? 'bg-lucky-600 text-white cursor-not-allowed'
-                        : 'bg-lucky-500 text-white hover:bg-lucky-600'
+                        ? 'bg-lucky-400 text-white cursor-wait'
+                        : 'bg-lucky-500 hover:bg-lucky-600 text-white hover:shadow-lg'
                     }`}
                   >
-                    {currentTier === plan.id 
-                      ? 'Current Plan' 
-                      : selectedTier === plan.id 
-                      ? 'Processing...' 
-                      : plan.price === 0 
-                      ? 'Get Started' 
-                      : 'Upgrade Now'
-                    }
+                    {currentTier === plan.id ? 'Current Plan' : selectedTier === plan.id ? 'Processing...' : 'Upgrade Now'}
                   </button>
                 </motion.div>
               ))}
             </div>
 
             {/* Footer */}
-            <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm text-gray-600 text-center">
-                💳 Secure payments powered by Stripe • 🔒 30-day money-back guarantee • 🚀 Cancel anytime
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-500">
+                All plans include our custom AI technology. No credit card required for free plans.
               </p>
             </div>
           </motion.div>

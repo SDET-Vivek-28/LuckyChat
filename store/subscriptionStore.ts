@@ -9,7 +9,7 @@ import { persist } from 'zustand/middleware'
 export type SubscriptionTier = 'free' | 'basic' | 'pro' | 'enterprise'
 
 interface SubscriptionPlan {
-  id: string
+  id: SubscriptionTier
   name: string
   price: number
   messagesPerMonth: number
@@ -18,13 +18,13 @@ interface SubscriptionPlan {
 }
 
 interface SubscriptionState {
-  currentPlan: string
+  currentPlan: SubscriptionTier
   messageCount: number
   plans: SubscriptionPlan[]
   canSendMessage: () => boolean
   incrementMessageCount: () => void
   getCurrentPlan: () => SubscriptionPlan | undefined
-  upgradePlan: (planId: string) => void
+  upgradePlan: (planId: SubscriptionTier) => void
   // Add methods for PricingModal
   currentTier: SubscriptionTier
   upgradeTier: (tier: SubscriptionTier) => void
@@ -85,7 +85,7 @@ export const useSubscriptionStore = create<SubscriptionState>()(
       upgradePlan: (planId) => set({ currentPlan: planId }),
       // Add methods for PricingModal
       get currentTier() {
-        return get().currentPlan as SubscriptionTier
+        return get().currentPlan
       },
       upgradeTier: (tier: SubscriptionTier) => set({ currentPlan: tier }),
       getAllPlans: () => get().plans
