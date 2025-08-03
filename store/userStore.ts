@@ -20,6 +20,8 @@ interface UserState {
   signIn: (userData: User) => void
   signOut: () => void
   getCurrentApiKey: () => string | undefined
+  updateApiKey: (apiKey: string) => void
+  toggleServiceType: () => void
 }
 
 export const useUserStore = create<UserState>()(
@@ -35,7 +37,13 @@ export const useUserStore = create<UserState>()(
         user: null, 
         isAuthenticated: false 
       }),
-      getCurrentApiKey: () => get().user?.apiKey
+      getCurrentApiKey: () => get().user?.apiKey,
+      updateApiKey: (apiKey: string) => set(state => ({
+        user: state.user ? { ...state.user, apiKey } : null
+      })),
+      toggleServiceType: () => set(state => ({
+        user: state.user ? { ...state.user, useAppService: !state.user.useAppService } : null
+      }))
     }),
     {
       name: 'lucky-user-storage'
