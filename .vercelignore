@@ -1,0 +1,3 @@
+# Exclude mobile directory from Vercel deployment
+mobile/
+mobile/**/* 
