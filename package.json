@@ -1,8 +1,23 @@
 {
   "name": "lucky-chat",
   "version": "1.0.0",
-  "description": "LuckyChat - A tribute to Lucky, the talking dog AI assistant",
-  "main": "index.js",
+  "description": "LuckyChat - Your AI Dog Assistant | Copyright © 2024 Appvik. All rights reserved.",
+  "license": "PROPRIETARY",
+  "author": "Appvik",
+  "copyright": "Copyright © 2024 Appvik. All rights reserved.",
+  "private": true,
+  "keywords": [
+    "ai",
+    "chat",
+    "assistant",
+    "dog",
+    "lucky",
+    "appvik",
+    "custom-ai",
+    "react",
+    "nextjs",
+    "typescript"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,36 +28,45 @@
     "mobile:ios": "cd mobile && npm run ios"
   },
   "dependencies": {
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "autoprefixer": "^10.4.0",
-    "date-fns": "^4.1.0",
-    "dotenv": "^17.2.1",
-    "framer-motion": "^10.16.0",
-    "lucide-react": "^0.292.0",
-    "next": "^14.0.0",
-    "openai": "^4.104.0",
-    "postcss": "^8.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-markdown": "^9.0.0",
+    "next": "14.2.31",
+    "react": "^18",
+    "react-dom": "^18",
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "tailwindcss": "^3.4.1",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "framer-motion": "^11.0.8",
+    "lucide-react": "^0.344.0",
+    "react-markdown": "^9.0.1",
     "react-syntax-highlighter": "^15.5.0",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5.0.0",
-    "zustand": "^4.5.7"
+    "@types/react-syntax-highlighter": "^15.5.11",
+    "openai": "^4.28.0",
+    "zustand": "^4.5.0",
+    "date-fns": "^3.3.1"
   },
   "devDependencies": {
-    "eslint": "^8.0.0",
-    "eslint-config-next": "^14.0.0"
+    "eslint": "^8",
+    "eslint-config-next": "14.2.31"
   },
-  "keywords": [
-    "lucky-chat",
-    "ai-assistant",
-    "talking-dog",
-    "chat-application",
-    "appvik"
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SDET-Vivek-28/AI_Powered_Lucky.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SDET-Vivek-28/AI_Powered_Lucky/issues"
+  },
+  "homepage": "https://appvik.com",
+  "contributors": [
+    "Appvik Team <support@appvik.com>"
   ],
-  "author": "Appvik",
-  "license": "MIT"
+  "funding": {
+    "type": "individual",
+    "url": "https://appvik.com/support"
+  }
 }

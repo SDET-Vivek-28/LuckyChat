@@ -142,8 +142,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                   <div className="flex items-center space-x-2">
                     <Sparkles className="w-5 h-5 text-lucky-500" />
                     <div>
-                      <div className="font-medium text-gray-800">Use App Service</div>
-                      <div className="text-sm text-gray-500">Free AI service provided by LuckyChat</div>
+                      <div className="font-medium text-gray-800">Use App Service (Recommended)</div>
+                      <div className="text-sm text-gray-500">Free AI service provided by LuckyChat - no setup required!</div>
                     </div>
                   </div>
                 </label>
@@ -160,7 +160,7 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                     <Zap className="w-5 h-5 text-lucky-500" />
                     <div>
                       <div className="font-medium text-gray-800">Use My Own API Key</div>
-                      <div className="text-sm text-gray-500">Use your own OpenAI API key</div>
+                      <div className="text-sm text-gray-500">Use your own OpenAI API key for unlimited usage</div>
                     </div>
                   </div>
                 </label>
@@ -318,8 +318,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
             <div className="mt-4 p-3 bg-lucky-50 rounded-lg">
               <p className="text-xs text-lucky-700">
                 {useAppService 
-                  ? "🎉 Free AI service provided by LuckyChat - no API key needed!"
-                  : "🔒 Your API key is stored locally and never shared. Each user uses their own OpenAI quota."
+                  ? "🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!"
+                  : "🔒 Your API key is stored locally and never shared. Each user uses their own OpenAI quota for unlimited usage."
                 }
               </p>
             </div>

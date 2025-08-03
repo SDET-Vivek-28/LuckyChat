@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import AIService from '@/lib/ai-service';
+import { AIService } from '@/lib/ai-service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       const stream = new ReadableStream({
         async start(controller) {
           try {
-            const response = await aiService.generateLuckyResponseStream(message, userApiKey, (chunk) => {
+            const response = await aiService.generateLuckyResponseStream(message, userApiKey, (chunk: string) => {
               controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk })}\n\n`));
             });
             

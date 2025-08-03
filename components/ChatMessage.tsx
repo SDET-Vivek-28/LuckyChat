@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { format } from 'date-fns'
-import LuckyAvatar from './LuckyAvatar'
+import LuckyAvatar from '@/components/LuckyAvatar'
 
 interface Message {
   id: number

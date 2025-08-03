@@ -1,10 +1,13 @@
+/**
+ * Subscription Store - Zustand State Management
+ * Copyright © 2024 Appvik. All rights reserved.
+ */
+
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-export type SubscriptionTier = 'free' | 'basic' | 'pro' | 'enterprise'
-
 interface SubscriptionPlan {
-  id: SubscriptionTier
+  id: string
   name: string
   price: number
   messagesPerMonth: number
@@ -12,89 +15,71 @@ interface SubscriptionPlan {
   apiKeyRequired: boolean
 }
 
-interface SubscriptionStore {
-  currentTier: SubscriptionTier
-  messagesUsed: number
-  messagesLimit: number
-  upgradeTier: (tier: SubscriptionTier) => void
-  incrementMessageCount: () => void
+interface SubscriptionState {
+  currentPlan: string
+  messageCount: number
+  plans: SubscriptionPlan[]
   canSendMessage: () => boolean
-  getCurrentPlan: () => SubscriptionPlan
-  getAllPlans: () => SubscriptionPlan[]
+  incrementMessageCount: () => void
+  getCurrentPlan: () => SubscriptionPlan | undefined
+  upgradePlan: (planId: string) => void
 }
 
-const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
-  {
-    id: 'free',
-    name: 'Free',
-    price: 0,
-    messagesPerMonth: 50,
-    features: ['Basic AI responses', 'Standard support', 'App service only'],
-    apiKeyRequired: false
-  },
-  {
-    id: 'basic',
-    name: 'Basic',
-    price: 9.99,
-    messagesPerMonth: 500,
-    features: ['Enhanced AI responses', 'Priority support', 'Personal API key', 'Chat history'],
-    apiKeyRequired: false
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    price: 19.99,
-    messagesPerMonth: 2000,
-    features: ['Advanced AI responses', '24/7 support', 'Personal API key', 'Unlimited history', 'Custom themes'],
-    apiKeyRequired: false
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    price: 99.99,
-    messagesPerMonth: 10000,
-    features: ['Enterprise AI responses', 'Dedicated support', 'Custom integrations', 'White-label options', 'Analytics'],
-    apiKeyRequired: true
-  }
-]
-
-export const useSubscriptionStore = create<SubscriptionStore>()(
+export const useSubscriptionStore = create<SubscriptionState>()(
   persist(
     (set, get) => ({
-      currentTier: 'free',
-      messagesUsed: 0,
-      messagesLimit: 50,
-      
-      upgradeTier: (tier: SubscriptionTier) => {
-        const plan = SUBSCRIPTION_PLANS.find(p => p.id === tier)
-        if (plan) {
-          set({
-            currentTier: tier,
-            messagesLimit: plan.messagesPerMonth
-          })
+      currentPlan: 'free',
+      messageCount: 0,
+      plans: [
+        {
+          id: 'free',
+          name: 'Free',
+          price: 0,
+          messagesPerMonth: 1000, // Increased for user acquisition
+          features: ['Custom AI', 'Unlimited Chat', '1000 messages/month', 'All Features'],
+          apiKeyRequired: false
+        },
+        {
+          id: 'basic',
+          name: 'Basic',
+          price: 0, // Free for now
+          messagesPerMonth: 5000,
+          features: ['Custom AI', 'Priority Support', '5000 messages/month', 'Advanced Features'],
+          apiKeyRequired: false
+        },
+        {
+          id: 'pro',
+          name: 'Pro',
+          price: 0, // Free for now
+          messagesPerMonth: 10000,
+          features: ['Custom AI', 'Premium Support', '10000 messages/month', 'All Features'],
+          apiKeyRequired: false
+        },
+        {
+          id: 'enterprise',
+          name: 'Enterprise',
+          price: 0, // Free for now
+          messagesPerMonth: 50000,
+          features: ['Custom AI', 'Unlimited Usage', 'API Access', 'Dedicated Support'],
+          apiKeyRequired: false
         }
-      },
-      
-      incrementMessageCount: () => {
-        set((state) => ({
-          messagesUsed: state.messagesUsed + 1
-        }))
-      },
-      
+      ],
       canSendMessage: () => {
         const state = get()
-        return state.messagesUsed < state.messagesLimit
+        const plan = state.plans.find(p => p.id === state.currentPlan)
+        return state.messageCount < (plan?.messagesPerMonth || 0)
       },
-      
+      incrementMessageCount: () => set(state => ({ 
+        messageCount: state.messageCount + 1 
+      })),
       getCurrentPlan: () => {
         const state = get()
-        return SUBSCRIPTION_PLANS.find(p => p.id === state.currentTier) || SUBSCRIPTION_PLANS[0]
+        return state.plans.find(p => p.id === state.currentPlan)
       },
-      
-      getAllPlans: () => SUBSCRIPTION_PLANS
+      upgradePlan: (planId) => set({ currentPlan: planId })
     }),
     {
-      name: 'lucky-chat-subscription',
+      name: 'lucky-subscription-storage'
     }
   )
 ) 
