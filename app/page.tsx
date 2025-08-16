@@ -18,7 +18,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, User, Settings, Plus, Crown, Brain } from 'lucide-react'
+import { Send, User, Settings, Plus, Crown, Brain, BarChart3, Users, Activity } from 'lucide-react'
 import { useChatStore } from '@/store/chatStore'
 import { useUserStore } from '@/store/userStore'
 import { useSubscriptionStore } from '@/store/subscriptionStore'
@@ -29,6 +29,7 @@ import UserProfile from '@/components/UserProfile'
 import NewChatButton from '@/components/NewChatButton'
 import PricingModal from '@/components/PricingModal'
 import AISettings from '@/components/AISettings'
+import AnalyticsDashboard from '@/components/AnalyticsDashboard'
 
 /**
  * Main Home Component - LuckyChat Application
@@ -47,14 +48,15 @@ export default function Home() {
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [showPricingModal, setShowPricingModal] = useState(false)
   const [showAISettings, setShowAISettings] = useState(false)
+  const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false)
   
   // Reference for auto-scrolling to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
   // Zustand store hooks for state management
   const { messages, addMessage, clearMessages, updateMessage } = useChatStore()
-  const { user, signIn, signOut, isAuthenticated, getCurrentApiKey } = useUserStore()
-  const { canSendMessage, incrementMessageCount, getCurrentPlan } = useSubscriptionStore()
+  const { user, signIn, signOut, isAuthenticated, getCurrentApiKey, updateUserActivity, incrementMessageCount, hasAdminAccess } = useUserStore()
+  const { canSendMessage, incrementMessageCount: incrementSubscriptionCount, getCurrentPlan } = useSubscriptionStore()
 
   /**
    * Auto-scroll to bottom of chat when new messages arrive
@@ -100,17 +102,24 @@ export default function Home() {
       return
     }
 
-    // Create user message object with timestamp
+    // Track user activity for analytics
+    updateUserActivity()
+
+    // Create user message and add to chat
     const userMessage = {
       id: Date.now(),
-      text: input,
+      text: input.trim(),
       sender: 'user' as const,
       timestamp: new Date()
     }
-
-    // Add user message to chat and increment usage counter
     addMessage(userMessage)
+    
+    // Increment message count for analytics
     incrementMessageCount()
+    
+    // Increment subscription message count
+    incrementSubscriptionCount()
+    
     setInput('')
     setIsTyping(true)
 
@@ -203,21 +212,46 @@ export default function Home() {
             {/* Upgrade Button - Triggers subscription modal */}
             <button
               onClick={() => setShowPricingModal(true)}
-              className="bg-lucky-500 text-white px-3 md:px-4 py-2 rounded-lg text-sm font-medium hover:bg-lucky-600 transition-colors"
+              className="bg-lucky-500 text-white px-4 md:px-6 py-3 rounded-lg text-sm font-medium hover:bg-lucky-600 transition-colors"
             >
               <span className="hidden sm:inline">Upgrade</span>
               <span className="sm:hidden">↑</span>
             </button>
             
+            {/* Usage Summary - Show basic stats */}
+            <div className="hidden lg:flex items-center space-x-4 text-xs text-gray-600">
+              <div className="flex items-center space-x-1">
+                <Users className="w-3 h-3" />
+                <span>{user?.messageCount || 0} messages</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Activity className="w-3 h-3" />
+                <span>{user?.sessionCount || 0} sessions</span>
+              </div>
+            </div>
+            
             {/* AI Settings Button - Configure AI preferences */}
             <button
               onClick={() => setShowAISettings(true)}
-              className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg transition-colors"
+              className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg transition-colors"
               title="AI Settings"
             >
               <Brain className="w-4 h-4" />
               <span className="hidden sm:inline text-sm">AI</span>
             </button>
+
+            {/* Analytics Dashboard Button - Admin Only */}
+            {user && hasAdminAccess() && (
+              <button
+                onClick={() => setShowAnalyticsDashboard(true)}
+                className="flex items-center space-x-2 bg-lucky-500 hover:bg-lucky-600 px-4 py-3 rounded-lg transition-colors text-white"
+                title="Analytics Dashboard (Admin Only)"
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span className="hidden sm:inline text-sm font-medium">Analytics</span>
+                <span className="hidden lg:inline text-xs bg-lucky-600 px-2 py-1 rounded-full">ADMIN</span>
+              </button>
+            )}
             
             {/* New Chat Button - Clear conversation */}
             <NewChatButton onNewChat={clearMessages} />
@@ -227,7 +261,7 @@ export default function Home() {
               <div className="flex items-center space-x-2 md:space-x-3">
                 <button
                   onClick={() => setShowUserProfile(true)}
-                  className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-3 md:px-4 py-2 rounded-lg transition-colors"
+                  className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 md:px-6 py-3 rounded-lg transition-colors"
                 >
                   <User className="w-4 h-4" />
                   <span className="hidden sm:inline text-sm font-medium">{user?.name}</span>
@@ -242,7 +276,7 @@ export default function Home() {
             ) : (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="bg-lucky-500 text-white px-4 md:px-6 py-2 rounded-lg font-medium hover:bg-lucky-600 transition-colors"
+                className="bg-lucky-500 text-white px-6 md:px-8 py-3 rounded-lg font-medium hover:bg-lucky-600 transition-colors"
               >
                 <span className="hidden sm:inline">Sign In</span>
                 <span className="sm:hidden">Login</span>
@@ -281,6 +315,41 @@ export default function Home() {
                     >
                       Sign In & Start Chatting
                     </button>
+                  </div>
+                )}
+                {isAuthenticated && (
+                  <div className="bg-lucky-50 border border-lucky-200 rounded-lg p-4">
+                    <p className="text-sm text-lucky-700 mb-2">
+                      🐾 <strong>New Feature:</strong> Comprehensive Veterinary Knowledge Base!
+                    </p>
+                    <p className="text-xs text-lucky-600 mb-3">
+                      Ask Lucky about pet health, emergency care, symptoms, nutrition, behavior, and more!
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-lucky-600">
+                      <div>• Emergency pet care guidance</div>
+                      <div>• Common symptoms & treatments</div>
+                      <div>• Preventive medicine advice</div>
+                      <div>• Pet nutrition & training tips</div>
+                    </div>
+                  </div>
+                )}
+                {isAuthenticated && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                    <p className="text-sm text-blue-700 mb-2">
+                      📚 <strong>New Feature:</strong> Complete Educational Knowledge Base!
+                    </p>
+                    <p className="text-xs text-blue-600 mb-3">
+                      Ask Lucky about any subject from 1st to 12th standard - math, science, history, English, and more!
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-600">
+                      <div>• Mathematics (Arithmetic to Calculus)</div>
+                      <div>• Science (Physics, Chemistry, Biology)</div>
+                      <div>• History (Ancient to Modern)</div>
+                      <div>• English & Social Studies</div>
+                    </div>
+                    <p className="text-xs text-blue-500 mt-3">
+                      Perfect for homework help, test preparation, and cross-subject learning!
+                    </p>
                   </div>
                 )}
               </div>
@@ -374,6 +443,7 @@ export default function Home() {
             id: Date.now().toString(),
             name: userData.name,
             email: userData.email,
+            mobile: userData.mobile,
             apiKey: userData.apiKey,
             useAppService: userData.useAppService
           }
@@ -391,6 +461,7 @@ export default function Home() {
       <UserProfile isOpen={showUserProfile} onClose={() => setShowUserProfile(false)} />
       <PricingModal isOpen={showPricingModal} onClose={() => setShowPricingModal(false)} />
       <AISettings isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
+      <AnalyticsDashboard isOpen={showAnalyticsDashboard} onClose={() => setShowAnalyticsDashboard(false)} />
     </div>
   )
 } 

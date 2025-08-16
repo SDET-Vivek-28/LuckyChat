@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { User, Key, Mail, Edit, Save, X, Sparkles, Zap, ToggleLeft } from 'lucide-react'
+import { User, Key, Mail, Edit, Save, X, Sparkles, Zap, ToggleLeft, Phone, Crown, Shield } from 'lucide-react'
 import { useUserStore } from '@/store/userStore'
 
 interface UserProfileProps {
@@ -52,7 +52,7 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl"
+        className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -72,43 +72,84 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
         </div>
 
         {/* User Info */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Name
             </label>
-            <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-              <User className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-800">{user?.name}</span>
+            <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+              <User className="w-5 h-5 text-gray-400" />
+              <span className="text-gray-800 text-base">{user?.name}</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Email
             </label>
-            <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-              <Mail className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-800">{user?.email}</span>
+            <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+              <Mail className="w-5 h-5 text-gray-400" />
+              <span className="text-gray-800 text-base">{user?.email}</span>
+            </div>
+          </div>
+
+          {user?.mobile && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Mobile Number
+              </label>
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <Phone className="w-5 h-5 text-gray-400" />
+                <span className="text-gray-800 text-base">{user.mobile}</span>
+              </div>
+            </div>
+          )}
+
+          {/* User Role */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Role
+            </label>
+            <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+              {user?.role === 'owner' ? (
+                <Crown className="w-5 h-5 text-yellow-500" />
+              ) : user?.role === 'admin' ? (
+                <Shield className="w-5 h-5 text-red-500" />
+              ) : (
+                <User className="w-5 h-5 text-gray-400" />
+              )}
+              <span className="text-gray-800 text-base capitalize">
+                {user?.role === 'owner' ? 'Owner' : user?.role === 'admin' ? 'Administrator' : 'User'}
+              </span>
+              {user?.role === 'owner' && (
+                <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                  FULL ACCESS
+                </span>
+              )}
+              {user?.role === 'admin' && (
+                <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                  ADMIN ACCESS
+                </span>
+              )}
             </div>
           </div>
 
           {/* Service Type Toggle */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
               AI Service Type
             </label>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center space-x-3">
                 {user?.useAppService ? (
                   <>
-                    <Sparkles className="w-4 h-4 text-lucky-500" />
-                    <span className="text-gray-800">App Service (Free)</span>
+                    <Sparkles className="w-5 h-5 text-lucky-500" />
+                    <span className="text-gray-800 text-base">App Service (Free)</span>
                   </>
                 ) : (
                   <>
-                    <Zap className="w-4 h-4 text-lucky-500" />
-                    <span className="text-gray-800">My API Key</span>
+                    <Zap className="w-5 h-5 text-lucky-500" />
+                    <span className="text-gray-800 text-base">My API Key</span>
                   </>
                 )}
               </div>
@@ -125,7 +166,7 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
           {/* API Key (Only show if using own key) */}
           {!user?.useAppService && (
             <div>
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-2">
                 <label className="block text-sm font-medium text-gray-700">
                   OpenAI API Key
                 </label>
@@ -141,40 +182,40 @@ export default function UserProfile({ isOpen, onClose }: UserProfileProps) {
               </div>
               
               {isEditing ? (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <div className="relative">
-                    <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Key className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                       type="password"
                       value={newApiKey}
                       onChange={(e) => setNewApiKey(e.target.value)}
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lucky-500"
+                      className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lucky-500 text-base"
                       placeholder="sk-..."
                     />
                   </div>
                   {error && (
                     <p className="text-red-500 text-sm">{error}</p>
                   )}
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-3">
                     <button
                       onClick={handleSave}
-                      className="flex-1 bg-lucky-500 text-white py-2 px-4 rounded-lg hover:bg-lucky-600 transition-colors text-sm font-medium"
+                      className="flex-1 bg-lucky-500 text-white py-3 px-4 rounded-lg hover:bg-lucky-600 transition-colors text-sm font-medium"
                     >
                       <Save className="w-4 h-4 inline mr-1" />
                       Save
                     </button>
                     <button
                       onClick={handleCancel}
-                      className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
+                      className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
                     >
                       Cancel
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg">
-                  <Key className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-800">
+                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                  <Key className="w-5 h-5 text-gray-400" />
+                  <span className="text-gray-800 text-base">
                     {user?.apiKey ? '••••••••••••••••' : 'Not set'}
                   </span>
                 </div>

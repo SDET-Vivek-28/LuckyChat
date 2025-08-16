@@ -48,7 +48,7 @@ export default function AISettings({ isOpen, onClose }: AISettingsProps) {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl"
+          className="bg-white rounded-2xl p-8 w-full max-w-lg shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -111,8 +111,8 @@ export default function AISettings({ isOpen, onClose }: AISettingsProps) {
 
           {/* Custom AI Features */}
           {useCustomAI && (
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-3">
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-medium text-gray-700">Custom AI Features</h3>
                 <button
                   onClick={() => setShowAddKnowledge(!showAddKnowledge)}
@@ -123,19 +123,63 @@ export default function AISettings({ isOpen, onClose }: AISettingsProps) {
                 </button>
               </div>
 
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4 text-lucky-500" />
+              <div className="space-y-3 text-sm text-gray-600">
+                <div className="flex items-center space-x-3">
+                  <BookOpen className="w-5 h-5 text-lucky-500" />
                   <span>Pattern matching and intent recognition</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Settings className="w-4 h-4 text-lucky-500" />
+                <div className="flex items-center space-x-3">
+                  <Settings className="w-5 h-5 text-lucky-500" />
                   <span>Mathematical calculations</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Brain className="w-4 h-4 text-lucky-500" />
+                <div className="flex items-center space-x-3">
+                  <Brain className="w-5 h-5 text-lucky-500" />
                   <span>Expandable knowledge base</span>
                 </div>
+              </div>
+
+              {/* Veterinary Information Section */}
+              <div className="mt-6 p-4 bg-lucky-50 rounded-lg border border-lucky-200">
+                <h4 className="text-sm font-medium text-lucky-800 mb-3 flex items-center space-x-2">
+                  <span className="w-4 h-4">🐾</span>
+                  <span>Veterinary Knowledge Base</span>
+                </h4>
+                <p className="text-xs text-lucky-700 mb-3">
+                  LuckyChat now includes comprehensive veterinary information covering:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-lucky-700">
+                  <div>• Emergency pet care</div>
+                  <div>• Common pet symptoms</div>
+                  <div>• Preventive medicine</div>
+                  <div>• Pet nutrition & behavior</div>
+                  <div>• Veterinary procedures</div>
+                  <div>• Pet life stage care</div>
+                </div>
+                <p className="text-xs text-lucky-600 mt-3">
+                  Ask Lucky about any pet health topic - from basic care to emergency situations!
+                </p>
+              </div>
+
+              {/* Educational Knowledge Section */}
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <h4 className="text-sm font-medium text-blue-800 mb-3 flex items-center space-x-2">
+                  <span className="w-4 h-4">📚</span>
+                  <span>Comprehensive Educational Knowledge</span>
+                </h4>
+                <p className="text-xs text-blue-700 mb-3">
+                  LuckyChat now includes complete educational content from 1st to 12th standard:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-700">
+                  <div>• Mathematics (Arithmetic to Calculus)</div>
+                  <div>• Science (Physics, Chemistry, Biology)</div>
+                  <div>• History (Ancient to Modern)</div>
+                  <div>• English Language Arts</div>
+                  <div>• Social Studies & Geography</div>
+                  <div>• Study Skills & Test Prep</div>
+                </div>
+                <p className="text-xs text-blue-600 mt-3">
+                  Ask Lucky about any subject, grade level, or cross-subject connections!
+                </p>
               </div>
 
               {/* Add Knowledge Form */}
@@ -145,36 +189,36 @@ export default function AISettings({ isOpen, onClose }: AISettingsProps) {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-4 p-4 bg-gray-50 rounded-lg"
+                    className="mt-6 p-5 bg-gray-50 rounded-lg"
                   >
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Topic/Keyword
                         </label>
                         <input
                           type="text"
                           value={newKnowledgeKey}
                           onChange={(e) => setNewKnowledgeKey(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lucky-500"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-lucky-500"
                           placeholder="e.g., python, cooking, travel"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Information
                         </label>
                         <textarea
                           value={newKnowledgeValue}
                           onChange={(e) => setNewKnowledgeValue(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-lucky-500"
-                          rows={3}
-                          placeholder="Add information about this topic..."
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-lucky-500"
+                          rows={5}
+                          placeholder="Add detailed information about this topic..."
                         />
                       </div>
                       <button
                         onClick={handleAddKnowledge}
-                        className="w-full bg-lucky-500 text-white py-2 px-4 rounded-lg hover:bg-lucky-600 transition-colors text-sm font-medium"
+                        className="w-full bg-lucky-500 text-white py-3 px-6 rounded-lg hover:bg-lucky-600 transition-colors text-base font-medium"
                       >
                         Add to Knowledge Base
                       </button>
