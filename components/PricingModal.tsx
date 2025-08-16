@@ -78,62 +78,149 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
 
             {/* Plans Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {getAllPlans().map((plan) => (
-                <motion.div
-                  key={plan.id}
-                  whileHover={{ scale: 1.02 }}
-                  className={`relative p-6 rounded-xl border-2 ${
-                    currentTier === plan.id 
-                      ? 'border-lucky-500 bg-lucky-50' 
-                      : 'border-gray-200 hover:border-lucky-300'
-                  }`}
-                >
-                  {currentTier === plan.id && (
-                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                      <span className="bg-lucky-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Current Plan
-                      </span>
-                    </div>
-                  )}
-
-                  <div className="text-center mb-6">
-                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full ${getTierColor(plan.id)} mb-4`}>
-                      {getTierIcon(plan.id)}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">{plan.name}</h3>
-                    <div className="text-3xl font-bold text-lucky-600 mb-1">
-                      ${plan.price}
-                      <span className="text-sm font-normal text-gray-500">/month</span>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4">{plan.messagesPerMonth.toLocaleString()} messages/month</p>
+              {/* Free Plan */}
+              <div className="relative bg-white border-2 border-lucky-200 rounded-2xl p-6 shadow-lg">
+                <div className="absolute -top-3 -left-3 bg-lucky-500 text-white text-xs font-bold px-3 py-1 rounded-full transform -rotate-12">
+                  Current Plan
+                </div>
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-lucky-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="w-8 h-8 text-lucky-600" />
                   </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Free</h3>
+                  <div className="text-3xl font-bold text-lucky-600 mb-1">$0<span className="text-lg text-gray-500">/month</span></div>
+                  <p className="text-gray-600">1,000 messages/month</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Custom AI
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Unlimited Chat
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    1000 messages/month
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    All Features
+                  </li>
+                </ul>
+                <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
+                  Current Plan
+                </button>
+              </div>
 
-                  {/* Features */}
-                  <div className="space-y-3 mb-6">
-                    {plan.features.map((feature, index) => (
-                      <div key={index} className="flex items-center text-sm">
-                        <Check className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </div>
-                    ))}
+              {/* Basic Plan */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Zap className="w-8 h-8 text-yellow-600" />
                   </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Basic</h3>
+                  <div className="text-3xl font-bold text-yellow-600 mb-1">$0<span className="text-lg text-gray-500">/month</span></div>
+                  <p className="text-gray-600">5,000 messages/month</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Custom AI
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Priority Support
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    5000 messages/month
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Advanced Features
+                  </li>
+                </ul>
+                {/* <button className="w-full py-3 px-6 bg-yellow-500 text-white font-semibold rounded-xl hover:bg-yellow-600 transition-colors">
+                  Upgrade Now
+                </button> */}
+                <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
+                  Coming Soon
+                </button>
+              </div>
 
-                  {/* Action Button */}
-                  <button
-                    onClick={() => handleUpgrade(plan.id)}
-                    disabled={selectedTier === plan.id}
-                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-                      currentTier === plan.id
-                        ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                        : selectedTier === plan.id
-                        ? 'bg-lucky-400 text-white cursor-wait'
-                        : 'bg-lucky-500 hover:bg-lucky-600 text-white hover:shadow-lg'
-                    }`}
-                  >
-                    {currentTier === plan.id ? 'Current Plan' : selectedTier === plan.id ? 'Processing...' : 'Upgrade Now'}
-                  </button>
-                </motion.div>
-              ))}
+              {/* Pro Plan */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Crown className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Pro</h3>
+                  <div className="text-3xl font-bold text-purple-600 mb-1">$0<span className="text-lg text-gray-500">/month</span></div>
+                  <p className="text-gray-600">10,000 messages/month</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Custom AI
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Premium Support
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    10000 messages/month
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    All Features
+                  </li>
+                </ul>
+                {/* <button className="w-full py-3 px-6 bg-purple-500 text-white font-semibold rounded-xl hover:bg-purple-600 transition-colors">
+                  Upgrade Now
+                </button> */}
+                <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
+                  Coming Soon
+                </button>
+              </div>
+
+              {/* Enterprise Plan */}
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Building className="w-8 h-8 text-indigo-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Enterprise</h3>
+                  <div className="text-3xl font-bold text-indigo-600 mb-1">$0<span className="text-lg text-gray-500">/month</span></div>
+                  <p className="text-gray-600">50,000 messages/month</p>
+                </div>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Custom AI
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Unlimited Usage
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    API Access
+                  </li>
+                  <li className="flex items-center text-sm text-gray-700">
+                    <Check className="w-5 h-5 text-green-500 mr-3" />
+                    Dedicated Support
+                  </li>
+                </ul>
+                {/* <button className="w-full py-3 px-6 bg-indigo-500 text-white font-semibold rounded-xl hover:bg-indigo-600 transition-colors">
+                  Contact Sales
+                </button> */}
+                <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
+                  Coming Soon
+                </button>
+              </div>
             </div>
 
             {/* Footer */}

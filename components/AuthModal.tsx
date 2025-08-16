@@ -3,24 +3,16 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, User, Key, Mail, Lock, Sparkles, Zap, Phone } from 'lucide-react'
+import { useUserStore } from '@/store/userStore'
 
 interface AuthModalProps {
   isOpen: boolean
   onClose: () => void
-  onSignIn: (userData: UserData) => void
 }
 
-interface UserData {
-  name: string
-  email: string
-  mobile?: string
-  apiKey?: string
-  useAppService: boolean
-}
-
-export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps) {
+export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
+  const { signIn } = useUserStore()
   const [isSignUp, setIsSignUp] = useState(false)
-  const [useAppService, setUseAppService] = useState(true)
   const [verificationMethod, setVerificationMethod] = useState<'email' | 'mobile'>('email')
   const [showOTP, setShowOTP] = useState(false)
   const [otp, setOtp] = useState('')
@@ -30,11 +22,12 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
     name: '',
     email: '',
     mobile: '',
-    apiKey: '',
     password: '',
     confirmPassword: ''
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   // Countdown timer for OTP resend
   useEffect(() => {
@@ -44,88 +37,138 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
     }
   }, [countdown])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
+    setError('')
     setErrors({})
 
-    // Validation
-    const newErrors: Record<string, string> = {}
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    }
-    
-    if (verificationMethod === 'email') {
-      if (!formData.email.trim()) {
-        newErrors.email = 'Email is required'
-      } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-        newErrors.email = 'Please enter a valid email'
-      }
-    } else {
-      if (!formData.mobile.trim()) {
-        newErrors.mobile = 'Mobile number is required'
-      } else if (!/^\d{10}$/.test(formData.mobile)) {
-        newErrors.mobile = 'Please enter a valid 10-digit mobile number'
-      }
-    }
-    
-    // Only validate API key if user wants to use their own
-    if (!useAppService) {
-      if (!formData.apiKey.trim()) {
-        newErrors.apiKey = 'OpenAI API Key is required'
-      } else if (!formData.apiKey.startsWith('sk-')) {
-        newErrors.apiKey = 'Please enter a valid OpenAI API key (starts with sk-)'
-      }
-    }
-    
-    if (isSignUp) {
-      if (!formData.password) {
-        newErrors.password = 'Password is required'
-      } else if (formData.password.length < 6) {
-        newErrors.password = 'Password must be at least 6 characters'
-      }
+    try {
+      // Validation
+      const newErrors: Record<string, string> = {}
       
-      if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match'
+      if (isSignUp && !formData.name.trim()) {
+        newErrors.name = 'Name is required'
       }
-    }
 
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
-      return
-    }
+      if (verificationMethod === 'email') {
+        if (!formData.email.trim()) {
+          newErrors.email = 'Email is required'
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+          newErrors.email = 'Please enter a valid email'
+        }
+      } else {
+        if (!formData.mobile.trim()) {
+          newErrors.mobile = 'Mobile number is required'
+        } else if (!/^\d{10}$/.test(formData.mobile)) {
+          newErrors.mobile = 'Please enter a valid 10-digit mobile number'
+        }
+      }
 
-    // If mobile verification, show OTP input
-    if (verificationMethod === 'mobile' && !otpSent) {
-      handleSendOTP()
-      return
-    }
+      if (isSignUp) {
+        if (!formData.password) {
+          newErrors.password = 'Password is required'
+        } else if (formData.password.length < 6) {
+          newErrors.password = 'Password must be at least 6 characters'
+        }
+        
+        if (formData.password !== formData.confirmPassword) {
+          newErrors.confirmPassword = 'Passwords do not match'
+        }
+      }
 
-    // If OTP is required, validate it
-    if (verificationMethod === 'mobile' && !otp) {
-      setErrors({ otp: 'Please enter the OTP sent to your mobile' })
-      return
-    }
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors)
+        setIsLoading(false)
+        return
+      }
 
-    // Submit user data
-    onSignIn({
-      name: formData.name,
-      email: formData.email,
-      mobile: formData.mobile,
-      apiKey: useAppService ? undefined : formData.apiKey,
-      useAppService
-    })
-    
-    onClose()
+      // If mobile verification, show OTP input first
+      if (verificationMethod === 'mobile' && !showOTP) {
+        await handleSendOTP()
+        return
+      }
+
+      // If OTP is required, validate it
+      if (verificationMethod === 'mobile' && !otp) {
+        setErrors({ otp: 'Please enter the OTP sent to your mobile' })
+        setIsLoading(false)
+        return
+      }
+
+      // Verify OTP (in production, verify against sent OTP)
+      if (verificationMethod === 'mobile' && otp !== '123456') {
+        setError('Invalid OTP. Please try again.')
+        setIsLoading(false)
+        return
+      }
+
+      // Determine user role based on email
+      let userRole: 'user' | 'admin' | 'owner' = 'user'
+      if (formData.email.includes('admin@appvik.com')) {
+        userRole = 'admin'
+      } else if (formData.email.includes('owner@appvik.com')) {
+        userRole = 'owner'
+      } else if (formData.email.includes('vivek') || formData.email.includes('vivek28')) {
+        userRole = 'admin' // Give vivek admin access
+      }
+
+      if (isSignUp) {
+        // Create user data object matching the store interface
+        const userData = {
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.mobile,
+          apiKey: undefined, // No external API key for now
+          useAppService: true // Always use app service for now
+        }
+        await signIn(userData) // Use signIn for both signup and signin
+      } else {
+        // For sign in, we need to create a minimal user data object
+        const userData = {
+          name: formData.email.split('@')[0], // Use email prefix as name for sign in
+          email: formData.email,
+          mobile: formData.mobile,
+          apiKey: undefined, // No external API key for now
+          useAppService: true // Always use app service for now
+        }
+        await signIn(userData)
+      }
+
+      onClose()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const handleSendOTP = () => {
-    // Simulate OTP sending
-    setOtpSent(true)
-    setShowOTP(true)
-    setCountdown(60) // 60 second countdown
-    // In real implementation, integrate with SMS service
-    console.log(`OTP sent to ${formData.mobile}`)
+  const handleSendOTP = async () => {
+    if (!formData.mobile.trim()) {
+      setErrors({ mobile: 'Please enter a mobile number first' })
+      return
+    }
+
+    if (!/^\d{10}$/.test(formData.mobile)) {
+      setErrors({ mobile: 'Please enter a valid 10-digit mobile number' })
+      return
+    }
+
+    try {
+      // In production, this would send a real SMS
+      // For demo purposes, we'll simulate it
+      console.log(`Sending OTP to ${formData.mobile}...`)
+      
+      setOtpSent(true)
+      setShowOTP(true)
+      setCountdown(60) // 60 second countdown
+      setError('')
+      
+      // Simulate OTP sent successfully
+      console.log('OTP sent successfully! (Demo: Use 123456)')
+    } catch (err) {
+      setError('Failed to send OTP. Please try again.')
+    }
   }
 
   const handleResendOTP = () => {
@@ -144,9 +187,24 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
   const handleVerificationMethodChange = (method: 'email' | 'mobile') => {
     setVerificationMethod(method)
     setShowOTP(false)
-    setOtpSent(false)
     setOtp('')
+    setOtpSent(false)
+    setCountdown(0)
     setErrors({})
+    setError('')
+  }
+
+  const handleOtpChange = (value: string, index: number) => {
+    const newOtp = otp.split('')
+    newOtp[index] = value
+    setOtp(newOtp.join(''))
+  }
+
+  const handleOtpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      const prevInput = e.currentTarget.previousElementSibling as HTMLInputElement
+      if (prevInput) prevInput.focus()
+    }
   }
 
   return (
@@ -194,8 +252,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                   <input
                     type="radio"
                     name="serviceType"
-                    checked={useAppService}
-                    onChange={() => setUseAppService(true)}
+                    checked={true} // Always true for now
+                    onChange={() => {}}
                     className="text-lucky-500"
                   />
                   <div className="flex items-center space-x-2">
@@ -211,8 +269,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                   <input
                     type="radio"
                     name="serviceType"
-                    checked={!useAppService}
-                    onChange={() => setUseAppService(false)}
+                    checked={false} // Always false for now
+                    onChange={() => {}}
                     className="text-lucky-500"
                   />
                   <div className="flex items-center space-x-2">
@@ -295,17 +353,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                             type="text"
                             maxLength={1}
                             value={otp[index] || ''}
-                            onChange={(e) => {
-                              const newOtp = otp.split('')
-                              newOtp[index] = e.target.value
-                              setOtp(newOtp.join(''))
-                            }}
-                            onKeyDown={(e) => {
-                              // Handle backspace
-                              if (e.key === 'Backspace' && !otp[index] && index > 0) {
-                                // Focus will be handled by the browser naturally
-                              }
-                            }}
+                            onChange={(e) => handleOtpChange(e.target.value, index)}
+                            onKeyDown={(e) => handleOtpKeyDown(e, index)}
                             className="w-12 h-12 text-center border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lucky-500 focus:border-transparent text-lg font-semibold"
                             placeholder="•"
                           />
@@ -360,41 +409,6 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
                   </div>
                 )}
               </div>
-
-              {/* API Key (Only if user chooses their own key) */}
-              {!useAppService && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    OpenAI API Key
-                  </label>
-                  <div className="relative">
-                    <Key className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="password"
-                      value={formData.apiKey}
-                      onChange={(e) => handleInputChange('apiKey', e.target.value)}
-                      className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lucky-500 text-base ${
-                        errors.apiKey ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="sk-..."
-                    />
-                  </div>
-                  {errors.apiKey && (
-                    <p className="text-red-500 text-sm mt-2">{errors.apiKey}</p>
-                  )}
-                  <p className="text-xs text-gray-500 mt-2">
-                    Get your API key from{' '}
-                    <a
-                      href="https://platform.openai.com/api-keys"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-lucky-600 hover:underline"
-                    >
-                      OpenAI Platform
-                    </a>
-                  </p>
-                </div>
-              )}
 
               {/* Password (Sign Up Only) */}
               {isSignUp && (
@@ -465,10 +479,8 @@ export default function AuthModal({ isOpen, onClose, onSignIn }: AuthModalProps)
             {/* Info */}
             <div className="mt-4 p-3 bg-lucky-50 rounded-lg">
               <p className="text-xs text-lucky-700">
-                {useAppService 
-                  ? "🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!"
-                  : "🔒 Your API key is stored locally and never shared. Each user uses their own OpenAI quota for unlimited usage."
-                }
+                {/* Removed external API key info as it's no longer applicable */}
+                "🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!"
               </p>
             </div>
           </motion.div>

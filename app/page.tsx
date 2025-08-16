@@ -18,18 +18,18 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, User, Settings, Plus, Crown, Brain, BarChart3, Users, Activity } from 'lucide-react'
+import { Send, Settings, User, Crown, BarChart3, Users, Activity } from 'lucide-react'
 import { useChatStore } from '@/store/chatStore'
 import { useUserStore } from '@/store/userStore'
 import { useSubscriptionStore } from '@/store/subscriptionStore'
-import ChatMessage from '@/components/ChatMessage'
-import LuckyAvatar from '@/components/LuckyAvatar'
 import AuthModal from '@/components/AuthModal'
 import UserProfile from '@/components/UserProfile'
-import NewChatButton from '@/components/NewChatButton'
-import PricingModal from '@/components/PricingModal'
+// import PricingModal from '@/components/PricingModal'
 import AISettings from '@/components/AISettings'
 import AnalyticsDashboard from '@/components/AnalyticsDashboard'
+import NewChatButton from '@/components/NewChatButton'
+import ChatMessage from '@/components/ChatMessage'
+import LuckyAvatar from '@/components/LuckyAvatar'
 
 /**
  * Main Home Component - LuckyChat Application
@@ -39,25 +39,16 @@ import AnalyticsDashboard from '@/components/AnalyticsDashboard'
  * and real-time communication with our custom AI assistant.
  */
 export default function Home() {
-  // State management for user input and UI interactions
+  const { messages, addMessage, updateMessage, clearMessages } = useChatStore()
+  const { user, isAuthenticated, signIn, hasAdminAccess } = useUserStore()
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
-  
-  // Modal state management for different UI components
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
-  const [showPricingModal, setShowPricingModal] = useState(false)
   const [showAISettings, setShowAISettings] = useState(false)
   const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false)
-  
-  // Reference for auto-scrolling to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
-  // Zustand store hooks for state management
-  const { messages, addMessage, clearMessages, updateMessage } = useChatStore()
-  const { user, signIn, signOut, isAuthenticated, getCurrentApiKey, updateUserActivity, incrementMessageCount, hasAdminAccess } = useUserStore()
-  const { canSendMessage, incrementMessageCount: incrementSubscriptionCount, getCurrentPlan } = useSubscriptionStore()
-
   /**
    * Auto-scroll to bottom of chat when new messages arrive
    * Provides smooth user experience during conversations
@@ -96,15 +87,6 @@ export default function Home() {
       return
     }
 
-    // Check subscription limits before allowing message
-    if (!canSendMessage()) {
-      setShowPricingModal(true)
-      return
-    }
-
-    // Track user activity for analytics
-    updateUserActivity()
-
     // Create user message and add to chat
     const userMessage = {
       id: Date.now(),
@@ -113,12 +95,6 @@ export default function Home() {
       timestamp: new Date()
     }
     addMessage(userMessage)
-    
-    // Increment message count for analytics
-    incrementMessageCount()
-    
-    // Increment subscription message count
-    incrementSubscriptionCount()
     
     setInput('')
     setIsTyping(true)
@@ -140,7 +116,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: input,
-          userApiKey: getCurrentApiKey(),
+          userApiKey: user?.apiKey, // Assuming user object has an apiKey
           stream: false
         }),
       })
@@ -179,9 +155,6 @@ export default function Home() {
     }
   }
 
-  // Get current subscription plan for UI display
-  const currentPlan = getCurrentPlan()
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-lucky-100 via-paw-100 to-lucky-200">
       {/* Header Section - Navigation and User Controls */}
@@ -201,22 +174,17 @@ export default function Home() {
             {/* Subscription Status Display */}
             <div className="hidden sm:flex items-center space-x-2 bg-gray-50 px-3 py-1 rounded-lg">
               <Crown className="w-4 h-4 text-lucky-500" />
-              <span className="text-sm font-medium text-gray-700">{currentPlan?.name || 'Free'}</span>
-              {isAuthenticated && (
-                <span className="text-xs text-gray-500">
-                  ({user?.useAppService ? 'App Service' : 'My API Key'})
-                </span>
-              )}
+              <span className="text-sm font-medium text-gray-700">{user?.useAppService ? 'App Service' : 'My API Key'}</span>
             </div>
             
-            {/* Upgrade Button - Triggers subscription modal */}
-            <button
+            {/* Upgrade Button - Temporarily disabled */}
+            {/* <button
               onClick={() => setShowPricingModal(true)}
               className="bg-lucky-500 text-white px-4 md:px-6 py-3 rounded-lg text-sm font-medium hover:bg-lucky-600 transition-colors"
             >
               <span className="hidden sm:inline">Upgrade</span>
               <span className="sm:hidden">↑</span>
-            </button>
+            </button> */}
             
             {/* Usage Summary - Show basic stats */}
             <div className="hidden lg:flex items-center space-x-4 text-xs text-gray-600">
@@ -236,7 +204,7 @@ export default function Home() {
               className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg transition-colors"
               title="AI Settings"
             >
-              <Brain className="w-4 h-4" />
+              <Settings className="w-4 h-4" />
               <span className="hidden sm:inline text-sm">AI</span>
             </button>
 
@@ -267,7 +235,7 @@ export default function Home() {
                   <span className="hidden sm:inline text-sm font-medium">{user?.name}</span>
                 </button>
                 <button
-                  onClick={signOut}
+                  onClick={() => {/* signOut functionality temporarily disabled */}}
                   className="text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-gray-100"
                 >
                   <Settings className="w-4 h-4" />
@@ -317,41 +285,51 @@ export default function Home() {
                     </button>
                   </div>
                 )}
-                {isAuthenticated && (
-                  <div className="bg-lucky-50 border border-lucky-200 rounded-lg p-4">
-                    <p className="text-sm text-lucky-700 mb-2">
-                      🐾 <strong>New Feature:</strong> Comprehensive Veterinary Knowledge Base!
-                    </p>
-                    <p className="text-xs text-lucky-600 mb-3">
-                      Ask Lucky about pet health, emergency care, symptoms, nutrition, behavior, and more!
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-lucky-600">
-                      <div>• Emergency pet care guidance</div>
-                      <div>• Common symptoms & treatments</div>
-                      <div>• Preventive medicine advice</div>
-                      <div>• Pet nutrition & training tips</div>
+                {isAuthenticated && hasAdminAccess() ? (
+                  <>
+                    <div className="bg-lucky-50 border border-lucky-200 rounded-lg p-4">
+                      <p className="text-sm text-lucky-700 mb-2">
+                        🐾 <strong>New Feature:</strong> Comprehensive Veterinary Knowledge Base!
+                      </p>
+                      <p className="text-xs text-lucky-600 mb-3">
+                        Ask Lucky about pet health, emergency care, symptoms, nutrition, behavior, and more!
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-lucky-600">
+                        <div>• Emergency pet care guidance</div>
+                        <div>• Common symptoms & treatments</div>
+                        <div>• Preventive medicine advice</div>
+                        <div>• Pet nutrition & training tips</div>
+                      </div>
                     </div>
-                  </div>
-                )}
-                {isAuthenticated && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-                    <p className="text-sm text-blue-700 mb-2">
-                      📚 <strong>New Feature:</strong> Complete Educational Knowledge Base!
-                    </p>
-                    <p className="text-xs text-blue-600 mb-3">
-                      Ask Lucky about any subject from 1st to 12th standard - math, science, history, English, and more!
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-600">
-                      <div>• Mathematics (Arithmetic to Calculus)</div>
-                      <div>• Science (Physics, Chemistry, Biology)</div>
-                      <div>• History (Ancient to Modern)</div>
-                      <div>• English & Social Studies</div>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                      <p className="text-sm text-blue-700 mb-2">
+                        📚 <strong>New Feature:</strong> Complete Educational Knowledge Base!
+                      </p>
+                      <p className="text-xs text-blue-600 mb-3">
+                        Ask Lucky about any subject from 1st to 12th standard - math, science, history, English, and more!
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-blue-600">
+                        <div>• Mathematics (Arithmetic to Calculus)</div>
+                        <div>• Science (Physics, Chemistry, Biology)</div>
+                        <div>• History (Ancient to Modern)</div>
+                        <div>• English & Social Studies</div>
+                      </div>
+                      <p className="text-xs text-blue-500 mt-3">
+                        Perfect for homework help, test preparation, and cross-subject learning!
+                      </p>
                     </div>
-                    <p className="text-xs text-blue-500 mt-3">
-                      Perfect for homework help, test preparation, and cross-subject learning!
+                  </>
+                ) : isAuthenticated ? (
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p className="text-sm text-gray-700 mb-2">
+                      🔒 <strong>Welcome to LuckyChat!</strong>
+                    </p>
+                    <p className="text-xs text-gray-600 mb-3">
+                      Your AI dog assistant is ready to help! Ask Lucky about anything - from general knowledge to 
+                      specific questions. For advanced features, contact your administrator.
                     </p>
                   </div>
-                )}
+                ) : null}
               </div>
             ) : (
               // Display chat messages with smooth animations
@@ -413,21 +391,9 @@ export default function Home() {
             
             {/* Usage Information - Shows message limits and upgrade options */}
             <div className="mt-2 text-xs text-gray-500 text-center">
-                              {currentPlan?.name === 'Free' ? (
-                <span>
-                  {messages.length}/100 messages used • 
-                  <button 
-                    onClick={() => setShowPricingModal(true)}
-                    className="text-lucky-500 hover:text-lucky-600 ml-1"
-                  >
-                    Upgrade for more
-                  </button>
-                </span>
-              ) : (
-                <span>
-                  {messages.length}/{currentPlan?.messagesPerMonth || 100} messages used
-                </span>
-              )}
+              <span>
+                {messages.length} messages used • Powered by LuckyChat Custom AI
+              </span>
             </div>
           </div>
         </div>
@@ -437,29 +403,9 @@ export default function Home() {
       <AuthModal 
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)}
-        onSignIn={(userData) => {
-          // Handle user sign-in with welcome message
-          const user = {
-            id: Date.now().toString(),
-            name: userData.name,
-            email: userData.email,
-            mobile: userData.mobile,
-            apiKey: userData.apiKey,
-            useAppService: userData.useAppService
-          }
-          signIn(user)
-          // Add a personalized welcome message
-          const welcomeMessage = {
-            id: Date.now(),
-            text: `Woof! Welcome back, ${userData.name}! I'm Lucky, your AI dog assistant. How can I help you today?`,
-            sender: 'lucky' as const,
-            timestamp: new Date()
-          }
-          addMessage(welcomeMessage)
-        }}
       />
       <UserProfile isOpen={showUserProfile} onClose={() => setShowUserProfile(false)} />
-      <PricingModal isOpen={showPricingModal} onClose={() => setShowPricingModal(false)} />
+      {/* <PricingModal isOpen={showPricingModal} onClose={() => setShowPricingModal(false)} /> */}
       <AISettings isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
       <AnalyticsDashboard isOpen={showAnalyticsDashboard} onClose={() => setShowAnalyticsDashboard(false)} />
     </div>
