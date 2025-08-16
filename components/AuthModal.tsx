@@ -164,6 +164,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       setCountdown(60) // 60 second countdown
       setError('')
       
+      // Show success message for demo
+      setError('✅ Demo OTP sent! Use code: 123456')
+      
       // Simulate OTP sent successfully
       console.log('OTP sent successfully! (Demo: Use 123456)')
     } catch (err) {
@@ -242,42 +245,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </button>
             </div>
 
-            {/* Service Type Selection */}
+            {/* Service Type Selection - Only Custom AI */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                Choose your AI service:
+                AI Service Type:
               </label>
               <div className="space-y-3">
-                <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <label className="flex items-center space-x-3 p-3 border-2 border-lucky-200 rounded-lg cursor-pointer bg-lucky-50">
                   <input
                     type="radio"
                     name="serviceType"
-                    checked={true} // Always true for now
-                    onChange={() => {}}
+                    checked={true}
+                    disabled
                     className="text-lucky-500"
                   />
                   <div className="flex items-center space-x-2">
                     <Sparkles className="w-5 h-5 text-lucky-500" />
                     <div>
-                      <div className="font-medium text-gray-800">Use App Service (Recommended)</div>
-                      <div className="text-sm text-gray-500">Free AI service provided by LuckyChat - no setup required!</div>
-                    </div>
-                  </div>
-                </label>
-                
-                <label className="flex items-center space-x-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
-                  <input
-                    type="radio"
-                    name="serviceType"
-                    checked={false} // Always false for now
-                    onChange={() => {}}
-                    className="text-lucky-500"
-                  />
-                  <div className="flex items-center space-x-2">
-                    <Zap className="w-5 h-5 text-lucky-500" />
-                    <div>
-                      <div className="font-medium text-gray-800">Use My Own API Key</div>
-                      <div className="text-sm text-gray-500">Use your own OpenAI API key for unlimited usage</div>
+                      <div className="font-medium text-gray-800">Custom AI Service (Active)</div>
+                      <div className="text-sm text-gray-500">Our own intelligent system - no API keys needed!</div>
                     </div>
                   </div>
                 </label>
@@ -479,9 +465,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             {/* Info */}
             <div className="mt-4 p-3 bg-lucky-50 rounded-lg">
               <p className="text-xs text-lucky-700">
-                {/* Removed external API key info as it's no longer applicable */}
-                "🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!"
+                🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!
               </p>
+              {verificationMethod === 'mobile' && (
+                <p className="text-xs text-orange-600 mt-2">
+                  📱 <strong>Demo Mode:</strong> OTP system is simulated. Use code: 123456
+                </p>
+              )}
             </div>
           </motion.div>
         </motion.div>

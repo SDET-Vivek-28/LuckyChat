@@ -75,38 +75,26 @@ export default function AISettings({ isOpen, onClose }: AISettingsProps) {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Model</h3>
               
               <div className="space-y-4">
-                <label className="flex items-start space-x-3 p-4 border-2 border-lucky-200 rounded-xl cursor-pointer hover:border-lucky-300 transition-colors">
+                <label className="flex items-start space-x-3 p-4 border-2 border-lucky-200 rounded-xl cursor-pointer bg-lucky-50">
                   <input
                     type="radio"
                     name="aiModel"
                     value="custom"
                     defaultChecked
+                    checked
+                    disabled
                     className="mt-1 w-4 h-4 text-lucky-600 border-gray-300 focus:ring-lucky-500"
                   />
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
                       <Brain className="w-5 h-5 text-lucky-600" />
-                      <span className="font-semibold text-gray-900">Custom AI (Recommended)</span>
+                      <span className="font-semibold text-gray-900">Custom AI (Active)</span>
                     </div>
                     <p className="text-gray-600 text-sm">Our own intelligent system - no external dependencies!</p>
                   </div>
                 </label>
 
-                <label className="flex items-start space-x-3 p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-gray-300 transition-colors">
-                  <input
-                    type="radio"
-                    name="aiModel"
-                    value="external"
-                    className="mt-1 w-4 h-4 text-gray-400 border-gray-300 focus:ring-gray-500"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <Zap className="w-5 h-5 text-gray-400" />
-                      <span className="font-semibold text-gray-500">External APIs</span>
-                    </div>
-                    <p className="text-gray-500 text-sm">Use OpenAI or other external AI services</p>
-                  </div>
-                </label>
+                {/* External APIs option removed - using custom AI only */}
               </div>
             </div>
 

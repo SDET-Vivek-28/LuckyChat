@@ -18,7 +18,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, Settings, User, Crown, BarChart3, Users, Activity } from 'lucide-react'
+import { Send, Settings, User, Crown, BarChart3, Users, Activity, MessageSquare, Plus, Sparkles } from 'lucide-react'
 import { useChatStore } from '@/store/chatStore'
 import { useUserStore } from '@/store/userStore'
 import { useSubscriptionStore } from '@/store/subscriptionStore'
@@ -30,6 +30,7 @@ import AnalyticsDashboard from '@/components/AnalyticsDashboard'
 import NewChatButton from '@/components/NewChatButton'
 import ChatMessage from '@/components/ChatMessage'
 import LuckyAvatar from '@/components/LuckyAvatar'
+import AdvancedFeaturesModal from '@/components/AdvancedFeaturesModal'
 
 /**
  * Main Home Component - LuckyChat Application
@@ -40,13 +41,14 @@ import LuckyAvatar from '@/components/LuckyAvatar'
  */
 export default function Home() {
   const { messages, addMessage, updateMessage, clearMessages } = useChatStore()
-  const { user, isAuthenticated, signIn, hasAdminAccess } = useUserStore()
+  const { user, isAuthenticated, signIn, signOut, hasAdminAccess } = useUserStore()
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showUserProfile, setShowUserProfile] = useState(false)
   const [showAISettings, setShowAISettings] = useState(false)
   const [showAnalyticsDashboard, setShowAnalyticsDashboard] = useState(false)
+  const [showAdvancedFeatures, setShowAdvancedFeatures] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   
   /**
@@ -198,14 +200,22 @@ export default function Home() {
               </div>
             </div>
             
-            {/* AI Settings Button - Configure AI preferences */}
+            {/* AI Settings Button - Opens AI configuration modal */}
             <button
               onClick={() => setShowAISettings(true)}
-              className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg transition-colors"
+              className="p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
               title="AI Settings"
             >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm">AI</span>
+              <Settings className="w-5 h-5" />
+            </button>
+
+            {/* Advanced Features Button - Opens advanced features modal */}
+            <button
+              onClick={() => setShowAdvancedFeatures(true)}
+              className="p-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
+              title="Advanced Features"
+            >
+              <Sparkles className="w-5 h-5" />
             </button>
 
             {/* Analytics Dashboard Button - Admin Only */}
@@ -235,7 +245,7 @@ export default function Home() {
                   <span className="hidden sm:inline text-sm font-medium">{user?.name}</span>
                 </button>
                 <button
-                  onClick={() => {/* signOut functionality temporarily disabled */}}
+                  onClick={signOut}
                   className="text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-lg hover:bg-gray-100"
                 >
                   <Settings className="w-4 h-4" />
@@ -408,6 +418,26 @@ export default function Home() {
       {/* <PricingModal isOpen={showPricingModal} onClose={() => setShowPricingModal(false)} /> */}
       <AISettings isOpen={showAISettings} onClose={() => setShowAISettings(false)} />
       <AnalyticsDashboard isOpen={showAnalyticsDashboard} onClose={() => setShowAnalyticsDashboard(false)} />
+      <AdvancedFeaturesModal 
+        isOpen={showAdvancedFeatures} 
+        onClose={() => setShowAdvancedFeatures(false)}
+        onVoiceInput={(text) => {
+          setInput(text)
+          setShowAdvancedFeatures(false)
+        }}
+        onImageAnalysis={(imageFile, description) => {
+          // Handle image analysis - could send to AI for processing
+          console.log('Image analysis:', { imageFile, description })
+        }}
+        onCodeGenerated={(code, language, explanation) => {
+          // Handle code generation - could send to chat
+          console.log('Code generated:', { code, language, explanation })
+        }}
+        onTranslation={(originalText, translatedText, targetLanguage) => {
+          // Handle translation - could send to chat
+          console.log('Translation:', { originalText, translatedText, targetLanguage })
+        }}
+      />
     </div>
   )
 } 

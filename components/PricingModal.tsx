@@ -110,20 +110,20 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
                   </li>
                 </ul>
                 <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
-                  Current Plan
+                        Current Plan
                 </button>
-              </div>
+                    </div>
 
               {/* Basic Plan */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
-                <div className="text-center mb-6">
+                  <div className="text-center mb-6">
                   <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Zap className="w-8 h-8 text-yellow-600" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Basic</h3>
                   <div className="text-3xl font-bold text-yellow-600 mb-1">$0<span className="text-lg text-gray-500">/month</span></div>
                   <p className="text-gray-600">5,000 messages/month</p>
-                </div>
+                    </div>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-center text-sm text-gray-700">
                     <Check className="w-5 h-5 text-green-500 mr-3" />
@@ -148,7 +148,7 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
                 <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
                   Coming Soon
                 </button>
-              </div>
+                    </div>
 
               {/* Pro Plan */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
@@ -184,7 +184,7 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
                 <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
                   Coming Soon
                 </button>
-              </div>
+                      </div>
 
               {/* Enterprise Plan */}
               <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-lg">
@@ -219,7 +219,7 @@ export default function PricingModal({ isOpen, onClose }: PricingModalProps) {
                 </button> */}
                 <button className="w-full py-3 px-6 bg-gray-300 text-gray-600 font-semibold rounded-xl cursor-not-allowed">
                   Coming Soon
-                </button>
+                  </button>
               </div>
             </div>
 

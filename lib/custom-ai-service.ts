@@ -127,6 +127,42 @@ export class CustomAIService {
     this.knowledgeBase.set('jokes', 'I love sharing jokes! Here are some fun ones: Why don\'t scientists trust atoms? Because they make up everything! What do you call a bear with no teeth? A gummy bear! Why did the scarecrow win an award? Because he was outstanding in his field!')
     this.knowledgeBase.set('veterinary_jokes', 'Here are some pet-themed jokes: What do you call a dog that\'s a magician? A labracadabrador! Why don\'t cats play poker in the jungle? Too many cheetahs! What do you call a cat that likes to bowl? An alley cat!')
     this.knowledgeBase.set('educational_jokes', 'Here are some educational jokes: Why was the math book sad? Because it had too many problems! What do you call a teacher who never farts in public? A private tutor! Why did the student eat his homework? Because the teacher said it was a piece of cake!')
+
+    // Physics Knowledge Base
+    this.knowledgeBase.set('newton_laws', 'Newton\'s Three Laws of Motion are fundamental principles of physics:\n\n1. **First Law (Law of Inertia):** An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an external force.\n\n2. **Second Law (F = ma):** Force equals mass times acceleration. The greater the mass, the more force needed to accelerate it.\n\n3. **Third Law (Action-Reaction):** For every action, there is an equal and opposite reaction.\n\nThese laws explain how objects move and interact in our universe. They\'re essential for understanding mechanics, engineering, and everyday motion!')
+    
+    this.knowledgeBase.set('physics_basics', 'Physics is the study of matter, energy, and their interactions. Key areas include:\n\n• **Mechanics:** Motion, forces, energy\n• **Thermodynamics:** Heat, temperature, energy transfer\n• **Electromagnetism:** Electricity, magnetism, light\n• **Quantum Physics:** Atomic and subatomic particles\n\nPhysics helps us understand everything from how cars move to how stars shine!')
+    
+    this.knowledgeBase.set('mathematics_class6', 'For 6th grade mathematics, I can help with:\n\n• **Arithmetic:** Fractions, decimals, percentages\n• **Basic Algebra:** Simple equations, variables\n• **Geometry:** Area, perimeter, basic shapes\n• **Data Handling:** Graphs, charts, statistics\n• **Number Systems:** Whole numbers, integers\n\nWhat specific math topic would you like to learn about?')
+    
+    this.knowledgeBase.set('science_class6', '6th grade science covers:\n\n• **Physics:** Simple machines, energy, motion\n• **Chemistry:** Matter, atoms, chemical reactions\n• **Biology:** Living organisms, cells, ecosystems\n• **Earth Science:** Weather, climate, geology\n\nI can explain any of these topics in detail!')
+    
+    this.knowledgeBase.set('history_class6', '6th grade history typically covers:\n\n• **Ancient Civilizations:** Egypt, Greece, Rome, India, China\n• **Medieval Period:** Middle Ages, kingdoms, trade\n• **Early Modern:** Renaissance, exploration, colonization\n• **World Cultures:** Different societies and their contributions\n\nWhich historical period interests you most?')
+
+    // Resource and Learning Material Knowledge
+    this.knowledgeBase.set('youtube_resources', 'I can recommend excellent YouTube channels and videos for learning:\n\n**Math & Science:**\n• Khan Academy - Comprehensive tutorials\n• 3Blue1Brown - Visual math explanations\n• Veritasium - Science experiments & concepts\n• Numberphile - Math puzzles & theories\n\n**History & Social Studies:**\n• Crash Course - Fast-paced overviews\n• Oversimplified - Fun historical summaries\n• Extra Credits - Gaming & history\n\n**Language & Literature:**\n• TED-Ed - Animated lessons\n• School of Life - Philosophy & culture\n\n**Study Skills:**\n• Thomas Frank - Study techniques\n• Ali Abdaal - Productivity & learning\n\nI can suggest specific videos based on your topic!')
+    
+    this.knowledgeBase.set('pdf_resources', 'I can recommend excellent PDF resources and where to find them:\n\n**Free PDF Sources:**\n• OpenStax - Free textbooks (openstax.org)\n• Project Gutenberg - Classic literature\n• Internet Archive - Historical documents\n• MIT OpenCourseWare - Course materials\n\n**Subject-Specific PDFs:**\n• Mathematics: Art of Problem Solving\n• Science: NASA educational materials\n• History: Primary source documents\n• Literature: Public domain books\n\n**Study Materials:**\n• Practice worksheets\n• Study guides\n• Reference sheets\n• Exam preparation materials\n\nI can help you find specific PDFs for your learning needs!')
+    
+    this.knowledgeBase.set('diagram_creation', 'I can help you create and understand diagrams for various subjects:\n\n**Types of Diagrams I Can Help With:**\n• **Math:** Number lines, graphs, geometric shapes, flowcharts\n• **Science:** Cell structures, chemical reactions, food chains, cycles\n• **History:** Timelines, family trees, battle maps, trade routes\n• **Geography:** Maps, climate zones, population distribution\n• **Literature:** Character maps, plot diagrams, story arcs\n\n**How I Can Help:**\n• Describe diagrams step-by-step\n• Explain what each part represents\n• Suggest tools for creating them\n• Provide examples and templates\n\n**Recommended Tools:**\n• Draw.io (free online diagrams)\n• Canva (templates & graphics)\n• Google Drawings (simple diagrams)\n• Paper & pencil (traditional method)\n\nWhat type of diagram would you like to create?')
+    
+    this.knowledgeBase.set('learning_resources', 'I can provide comprehensive learning resources for any topic:\n\n**Resource Types:**\n• **Videos:** YouTube channels, educational platforms\n• **Documents:** PDFs, textbooks, worksheets\n• **Interactive:** Apps, games, simulations\n• **Practice:** Quizzes, exercises, problems\n• **Visual:** Diagrams, charts, infographics\n\n**Learning Approaches:**\n• **Visual Learners:** Videos, diagrams, charts\n• **Reading Learners:** Books, articles, PDFs\n• **Hands-on:** Experiments, projects, practice\n• **Auditory:** Podcasts, lectures, discussions\n\n**Subject-Specific Resources:**\n• **Math:** Khan Academy, IXL, Mathway\n• **Science:** PhET simulations, NASA, National Geographic\n• **History:** BBC History, History Channel, museums\n• **Language:** Duolingo, Grammarly, literature\n\nTell me what you want to learn and I\'ll suggest the best resources!')
+    
+    this.knowledgeBase.set('study_techniques', 'Here are proven study techniques that work:\n\n**Active Learning Methods:**\n• **Feynman Technique:** Explain concepts in simple terms\n• **Mind Mapping:** Visual organization of ideas\n• **Spaced Repetition:** Review at increasing intervals\n• **Practice Testing:** Self-quizzing and problem-solving\n\n**Memory Techniques:**\n• **Mnemonics:** Memory aids and acronyms\n• **Visualization:** Create mental images\n• **Association:** Link new info to existing knowledge\n• **Chunking:** Break information into smaller parts\n\n**Study Environment:**\n• **Pomodoro Technique:** 25-minute focused sessions\n• **Distraction-free:** Quiet, organized space\n• **Regular breaks:** 5-minute breaks every 25 minutes\n• **Consistent schedule:** Same time, same place\n\n**Subject-Specific Tips:**\n• **Math:** Practice problems, understand concepts\n• **Science:** Experiments, real-world examples\n• **History:** Timelines, cause-and-effect\n• **Language:** Reading, writing, speaking\n\nWhich technique would you like to learn more about?')
+    
+    this.knowledgeBase.set('online_learning_platforms', 'Here are the best online learning platforms:\n\n**Free Platforms:**\n• **Khan Academy:** Math, science, humanities\n• **Coursera:** University courses (audit free)\n• **edX:** MIT, Harvard courses\n• **YouTube Education:** Countless tutorials\n• **MIT OpenCourseWare:** University materials\n\n**Paid Platforms:**\n• **Udemy:** Skill-based courses\n• **Skillshare:** Creative & business skills\n• **MasterClass:** Expert-led courses\n• **LinkedIn Learning:** Professional development\n\n**Subject-Specific:**\n• **Math:** IXL, Mathway, Brilliant\n• **Science:** PhET, NASA, National Geographic\n• **Programming:** Codecademy, freeCodeCamp\n• **Languages:** Duolingo, Memrise, Babbel\n\n**Features to Look For:**\n• Interactive exercises\n• Progress tracking\n• Community support\n• Mobile apps\n• Certificates\n\nWhich platform interests you most?')
+
+    // Specific Topic + Resource Combinations
+    this.knowledgeBase.set('newton_laws_with_resources', '**Newton\'s Three Laws of Motion** are fundamental principles of physics:\n\n1. **First Law (Law of Inertia):** An object at rest stays at rest, and an object in motion stays in motion unless acted upon by an external force.\n\n2. **Second Law (F = ma):** Force equals mass times acceleration. The greater the mass, the more force needed to accelerate it.\n\n3. **Third Law (Action-Reaction):** For every action, there is an equal and opposite reaction.\n\n**🎥 Best YouTube Resources:**\n• **Khan Academy Physics** - Step-by-step explanations\n• **3Blue1Brown** - Visual understanding of forces\n• **Veritasium** - Real-world examples and experiments\n• **Physics Girl** - Fun demonstrations\n\n**📚 PDF & Reading Materials:**\n• **OpenStax Physics** - Free textbook (openstax.org)\n• **NASA Physics** - Space applications\n• **Practice Problems** - Art of Problem Solving\n\n**📊 Diagrams & Visuals:**\n• **Force diagrams** showing action-reaction pairs\n• **Motion graphs** for acceleration vs. time\n• **Free body diagrams** for force analysis\n\n**🔬 Hands-on Learning:**\n• **PhET Simulations** - Interactive physics\n• **Simple experiments** with everyday objects\n• **Practice problems** with real-world scenarios\n\nThese laws explain how objects move and interact in our universe. They\'re essential for understanding mechanics, engineering, and everyday motion!')
+    
+    this.knowledgeBase.set('mathematics_class6_with_resources', '**6th Grade Mathematics** covers essential concepts that build your math foundation:\n\n**📐 Core Topics:**\n• **Arithmetic:** Fractions, decimals, percentages, ratios\n• **Basic Algebra:** Simple equations, variables, expressions\n• **Geometry:** Area, perimeter, volume, basic shapes\n• **Data Handling:** Graphs, charts, statistics, probability\n• **Number Systems:** Whole numbers, integers, rational numbers\n\n**🎥 Best YouTube Resources:**\n• **Khan Academy 6th Grade Math** - Complete curriculum\n• **Math Antics** - Fun, visual explanations\n• **Numberphile** - Interesting math concepts\n• **IXL Math** - Interactive practice\n\n**📚 PDF & Reading Materials:**\n• **OpenStax Math** - Free textbooks\n• **Practice Worksheets** - Printable exercises\n• **Study Guides** - Topic summaries\n• **Problem Sets** - Art of Problem Solving\n\n**📊 Visual Learning Tools:**\n• **Geogebra** - Interactive geometry\n• **Desmos** - Graphing calculator\n• **Math manipulatives** - Physical learning tools\n\n**🎮 Interactive Practice:**\n• **IXL Math** - Adaptive practice\n• **Khan Academy** - Progress tracking\n• **Math games** - Fun learning\n\n**💡 Study Tips:**\n• Practice daily with real problems\n• Use visual aids and diagrams\n• Connect math to real life\n• Don\'t rush - understand concepts deeply\n\nWhat specific math topic would you like to explore? I can provide targeted resources!')
+    
+    this.knowledgeBase.set('science_class6_with_resources', '**6th Grade Science** introduces you to the wonders of the natural world:\n\n**🔬 Core Topics:**\n• **Physics:** Simple machines, energy, motion, forces\n• **Chemistry:** Matter, atoms, chemical reactions, solutions\n• **Biology:** Living organisms, cells, ecosystems, adaptations\n• **Earth Science:** Weather, climate, geology, space\n• **Scientific Method:** Observation, hypothesis, experimentation\n\n**🎥 Best YouTube Resources:**\n• **Khan Academy Science** - Comprehensive lessons\n• **Crash Course Kids** - Fun science explanations\n• **SciShow Kids** - Engaging experiments\n• **Veritasium** - Science demonstrations\n• **National Geographic Kids** - Nature and animals\n\n**📚 PDF & Reading Materials:**\n• **OpenStax Science** - Free textbooks\n• **NASA Education** - Space science materials\n• **National Geographic** - Articles and guides\n• **Science Journal** - Current research\n\n**🔬 Hands-on Experiments:**\n• **PhET Simulations** - Interactive science\n• **Home experiments** with safe materials\n• **Virtual labs** for complex concepts\n• **Science fair projects** ideas\n\n**📊 Visual Learning:**\n• **3D models** of cells and molecules\n• **Interactive diagrams** of ecosystems\n• **Video demonstrations** of experiments\n• **Infographics** for complex concepts\n\n**🌍 Real-World Connections:**\n• **Environmental science** projects\n• **Weather tracking** activities\n• **Plant growth** experiments\n• **Energy conservation** projects\n\n**💡 Study Strategies:**\n• **Observe** the world around you\n• **Ask questions** about how things work\n• **Experiment** safely at home\n• **Connect** science to daily life\n\nWhich science topic interests you most? I can provide specific resources and experiments!')
+
+    // Intelligent Reasoning and Resource Selection
+    this.knowledgeBase.set('resource_reasoning', 'I recommend resources based on your learning needs:\n\n**🎥 Why YouTube Videos?**\n• **Visual learners** understand better with moving images\n• **Step-by-step** demonstrations show exact processes\n• **Real examples** make abstract concepts concrete\n• **Engaging content** keeps you interested longer\n\n**📚 Why PDFs & Reading?**\n• **Reference material** you can review anytime\n• **Detailed explanations** for complex topics\n• **Practice problems** with solutions\n• **Study at your own pace**\n\n**📊 Why Diagrams & Visuals?**\n• **Spatial understanding** of relationships\n• **Memory retention** through visual cues\n• **Complex concepts** simplified visually\n• **Pattern recognition** made easier\n\n**🔬 Why Hands-on Activities?**\n• **Active learning** improves retention\n• **Real-world application** of concepts\n• **Problem-solving skills** development\n• **Experiential understanding**\n\n**💡 My Recommendation Strategy:**\n1. **Assess your topic** - What are you learning?\n2. **Consider your style** - Visual, reading, hands-on?\n3. **Match resources** - Best tools for your needs\n4. **Provide variety** - Different approaches to try\n\nWhat would you like to learn? I\'ll suggest the best resources with explanations!')
+    
+    this.knowledgeBase.set('learning_style_adaptation', 'I adapt my resource recommendations to your learning style:\n\n**👁️ Visual Learners:**\n• **YouTube videos** with clear graphics\n• **Interactive diagrams** and charts\n• **Infographics** and visual summaries\n• **3D models** and simulations\n\n**📖 Reading Learners:**\n• **Detailed PDFs** and textbooks\n• **Comprehensive articles** and guides\n• **Practice worksheets** with explanations\n• **Reference materials** for review\n\n**✋ Hands-on Learners:**\n• **Experiments** and activities\n• **Interactive apps** and games\n• **Practice problems** and exercises\n• **Real-world projects**\n\n**👂 Auditory Learners:**\n• **Podcasts** and audio lessons\n• **Video explanations** with clear narration\n• **Discussion groups** and study partners\n• **Verbal explanations** and summaries\n\n**🔄 Mixed Learning Approach:**\n• **Combine multiple resources** for best results\n• **Start with overview** (video/text)\n• **Practice with exercises** (hands-on)\n• **Review with summaries** (reading)\n\n**💡 Pro Tip:** Most people learn best with a combination of methods. Try different approaches and see what works for you!')
   }
 
   private initializeIntentPatterns() {
@@ -315,6 +351,105 @@ export class CustomAIService {
     this.intentPatterns.set('test_preparation', [
       /(test|exam|quiz|assessment|preparation|study)/i,
       /(review|practice|sample|question|answer|score)/i
+    ])
+
+    // Physics and Specific Topic Patterns
+    this.intentPatterns.set('newton_laws', [
+      /(newton|newton's|newtons)\s+(law|laws|law of motion)/i,
+      /(first|second|third)\s+(law of motion)/i,
+      /(inertia|f\s*=\s*ma|action.*reaction)/i
+    ])
+    
+    this.intentPatterns.set('physics_basics', [
+      /(physics|physical science|mechanics|thermodynamics|electromagnetism|quantum)/i,
+      /(force|energy|motion|matter|atoms|particles)/i
+    ])
+    
+    this.intentPatterns.set('mathematics_class6', [
+      /(class\s*6|grade\s*6|6th\s*grade|sixth\s*grade)\s+(math|mathematics)/i,
+      /(6th|sixth)\s+(class|grade)\s+(math|mathematics)/i
+    ])
+    
+    this.intentPatterns.set('science_class6', [
+      /(class\s*6|grade\s*6|6th\s*grade|sixth\s*grade)\s+(science|physics|chemistry|biology)/i,
+      /(6th|sixth)\s+(class|grade)\s+(science|physics|chemistry|biology)/i
+    ])
+    
+    this.intentPatterns.set('history_class6', [
+      /(class\s*6|grade\s*6|6th\s*grade|sixth\s*grade)\s+(history|social studies)/i,
+      /(6th|sixth)\s+(class|grade)\s+(history|social studies)/i
+    ])
+
+    // Resource and Learning Material Patterns
+    this.intentPatterns.set('youtube_resources', [
+      /(youtube|video|watch|channel|tutorial|lesson)/i,
+      /(show me|find|recommend|suggest)\s+(video|youtube|tutorial)/i,
+      /(learn|study|understand)\s+(from|with|using)\s+(video|youtube)/i
+    ])
+    
+    this.intentPatterns.set('pdf_resources', [
+      /(pdf|document|textbook|book|reading|material)/i,
+      /(download|get|find|download)\s+(pdf|document|textbook)/i,
+      /(study|learn|read)\s+(from|using)\s+(pdf|document|book)/i
+    ])
+    
+    this.intentPatterns.set('diagram_creation', [
+      /(diagram|chart|graph|drawing|visual|picture)/i,
+      /(create|make|draw|show)\s+(diagram|chart|graph|visual)/i,
+      /(explain|understand|see)\s+(with|using)\s+(diagram|chart|visual)/i
+    ])
+    
+    this.intentPatterns.set('learning_resources', [
+      /(resource|material|tool|platform|website|app)/i,
+      /(how to|best way|recommend|suggest)\s+(learn|study|understand)/i,
+      /(where|what|which)\s+(resource|material|tool)\s+(for|to)/i
+    ])
+    
+    this.intentPatterns.set('study_techniques', [
+      /(study|learn|memorize|remember|technique|method)/i,
+      /(how to|best way|effective|efficient)\s+(study|learn|memorize)/i,
+      /(study tip|learning method|memory technique)/i
+    ])
+    
+    this.intentPatterns.set('online_learning_platforms', [
+      /(platform|website|app|online|course|learning)/i,
+      /(khan academy|coursera|edx|udemy|skillshare)/i,
+      /(best|recommend|suggest)\s+(platform|website|app)/i
+    ])
+
+    // Reasoning and Learning Style Patterns
+    this.intentPatterns.set('resource_reasoning', [
+      /(why|how|explain|reason|reasoning)/i,
+      /(why.*resource|why.*youtube|why.*pdf|why.*diagram)/i,
+      /(how.*choose|how.*select|how.*pick)/i,
+      /(explain.*choice|explain.*recommendation)/i
+    ])
+    
+    this.intentPatterns.set('learning_style_adaptation', [
+      /(learning style|visual|reading|hands-on|auditory)/i,
+      /(how.*learn|best way.*learn|effective.*learn)/i,
+      /(visual learner|reading learner|hands-on learner)/i,
+      /(adapt|personalize|customize)\s+(resource|material)/i
+    ])
+
+    // Enhanced Topic + Resource Patterns
+    this.intentPatterns.set('newton_laws_with_resources', [
+      /(newton|newton's|newtons)\s+(law|laws|law of motion)/i,
+      /(first|second|third)\s+(law of motion)/i,
+      /(inertia|f\s*=\s*ma|action.*reaction)/i,
+      /(explain|tell me about|what are|describe)\s+(newton|newton's laws)/i
+    ])
+    
+    this.intentPatterns.set('mathematics_class6_with_resources', [
+      /(class\s*6|grade\s*6|6th\s*grade|sixth\s*grade)\s+(math|mathematics)/i,
+      /(6th|sixth)\s+(class|grade)\s+(math|mathematics)/i,
+      /(learn|study|understand)\s+(6th|sixth)\s+(grade|class)\s+(math|mathematics)/i
+    ])
+    
+    this.intentPatterns.set('science_class6_with_resources', [
+      /(class\s*6|grade\s*6|6th\s*grade|sixth\s*grade)\s+(science|physics|chemistry|biology)/i,
+      /(6th|sixth)\s+(class|grade)\s+(science|physics|chemistry|biology)/i,
+      /(learn|study|understand)\s+(6th|sixth)\s+(grade|class)\s+(science|physics|chemistry|biology)/i
     ])
   }
 
@@ -570,6 +705,74 @@ export class CustomAIService {
       return this.getResponse('real-world connections')
     }
 
+    // Handle specific physics topics
+    if (this.matchesIntent(lowerMessage, 'newton_laws_with_resources')) {
+      return this.getResponse('newton_laws_with_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'newton_laws')) {
+      return this.getResponse('newton_laws')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'physics_basics')) {
+      return this.getResponse('physics_basics')
+    }
+    
+    // Handle class-specific topics with resources
+    if (this.matchesIntent(lowerMessage, 'mathematics_class6_with_resources')) {
+      return this.getResponse('mathematics_class6_with_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'mathematics_class6')) {
+      return this.getResponse('mathematics_class6')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'science_class6_with_resources')) {
+      return this.getResponse('science_class6_with_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'science_class6')) {
+      return this.getResponse('science_class6')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'history_class6')) {
+      return this.getResponse('history_class6')
+    }
+
+    // Handle resource requests
+    if (this.matchesIntent(lowerMessage, 'youtube_resources')) {
+      return this.getResponse('youtube_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'pdf_resources')) {
+      return this.getResponse('pdf_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'diagram_creation')) {
+      return this.getResponse('diagram_creation')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'learning_resources')) {
+      return this.getResponse('learning_resources')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'study_techniques')) {
+      return this.getResponse('study_techniques')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'online_learning_platforms')) {
+      return this.getResponse('online_learning_platforms')
+    }
+
+    // Handle reasoning and learning style requests
+    if (this.matchesIntent(lowerMessage, 'resource_reasoning')) {
+      return this.getResponse('resource_reasoning')
+    }
+    
+    if (this.matchesIntent(lowerMessage, 'learning_style_adaptation')) {
+      return this.getResponse('learning_style_adaptation')
+    }
+
     // If no specific intent is matched, provide a helpful response
     return `I'm here to help you with anything! I can assist with questions, provide information, help with learning, or just chat. Feel free to ask me anything specific, or let me know what you'd like to explore. I'm designed to handle cross-questioning and follow-up questions, so don't hesitate to dig deeper into any topic!`
   }
@@ -582,13 +785,13 @@ export class CustomAIService {
 
   // Add streaming support method
   async generateLuckyResponseStream(
-    userMessage: string, 
+    userMessage: string,
     onChunk?: (chunk: string) => void
   ): Promise<void> {
     const response = await this.processMessage(userMessage)
-    
+      
     // Simulate streaming by sending the response in chunks
-    if (onChunk) {
+      if (onChunk) {
       const words = response.split(' ')
       for (let i = 0; i < words.length; i++) {
         onChunk(words[i] + ' ')
