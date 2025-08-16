@@ -538,40 +538,78 @@ export class CustomAIService {
       return this.getResponse('chemistry in daily life')
     }
     
-    if (this.matchesBase(lowerMessage, 'biology and medicine')) {
+    if (this.matchesIntent(lowerMessage, 'biology and medicine')) {
       return this.getResponse('biology and medicine')
     }
     
-    if (this.matchesBase(lowerMessage, 'physics and technology')) {
+    if (this.matchesIntent(lowerMessage, 'physics and technology')) {
       return this.getResponse('physics and technology')
     }
     
-    if (this.matchesBase(lowerMessage, 'history and current events')) {
+    if (this.matchesIntent(lowerMessage, 'history and current events')) {
       return this.getResponse('history and current events')
     }
     
-    if (this.matchesBase(lowerMessage, 'active learning')) {
+    if (this.matchesIntent(lowerMessage, 'active learning')) {
       return this.getResponse('active learning')
     }
     
-    if (this.matchesBase(lowerMessage, 'spaced repetition')) {
+    if (this.matchesIntent(lowerMessage, 'spaced repetition')) {
       return this.getResponse('spaced repetition')
     }
     
-    if (this.matchesBase(lowerMessage, 'mind mapping')) {
+    if (this.matchesIntent(lowerMessage, 'mind mapping')) {
       return this.getResponse('mind mapping')
     }
     
-    if (this.matchesBase(lowerMessage, 'peer teaching')) {
+    if (this.matchesIntent(lowerMessage, 'peer teaching')) {
       return this.getResponse('peer teaching')
     }
     
-    if (this.matchesBase(lowerMessage, 'real-world connections')) {
+    if (this.matchesIntent(lowerMessage, 'real-world connections')) {
       return this.getResponse('real-world connections')
     }
 
     // If no specific intent is matched, provide a helpful response
     return `I'm here to help you with anything! I can assist with questions, provide information, help with learning, or just chat. Feel free to ask me anything specific, or let me know what you'd like to explore. I'm designed to handle cross-questioning and follow-up questions, so don't hesitate to dig deeper into any topic!`
+  }
+
+  // Add the missing method that the AI service expects
+  async generateLuckyResponse(userMessage: string): Promise<{ text: string }> {
+    const response = await this.processMessage(userMessage)
+    return { text: response }
+  }
+
+  // Add streaming support method
+  async generateLuckyResponseStream(
+    userMessage: string, 
+    onChunk?: (chunk: string) => void
+  ): Promise<void> {
+    const response = await this.processMessage(userMessage)
+    
+    // Simulate streaming by sending the response in chunks
+    if (onChunk) {
+      const words = response.split(' ')
+      for (let i = 0; i < words.length; i++) {
+        onChunk(words[i] + ' ')
+        // Small delay to simulate streaming
+        await new Promise(resolve => setTimeout(resolve, 50))
+      }
+    }
+  }
+
+  // Add intent management method
+  addIntent(intent: any) {
+    // This method allows adding new intents to the AI service
+    // For now, it's a placeholder that can be expanded later
+    console.log('Adding new intent:', intent)
+  }
+
+  // Add conversation history method
+  getConversationHistory(): string[] {
+    // This method returns conversation history
+    // For now, it's a placeholder that can be expanded later
+    return []
   }
 
   private matchesIntent(message: string, intent: string): boolean {

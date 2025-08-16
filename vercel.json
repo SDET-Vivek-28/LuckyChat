@@ -15,10 +15,5 @@
   "env": {
     "NEXT_PUBLIC_APP_NAME": "LuckyChat",
     "NEXT_PUBLIC_APP_DESCRIPTION": "Your AI Dog Assistant"
-  },
-  "functions": {
-    "app/api/**/*.ts": {
-      "maxDuration": 30
-    }
   }
 } 
