@@ -96,18 +96,41 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         return
       }
 
-      // Validate OTP if using mobile verification
-      if (verificationMethod === 'mobile' && otp !== '123456') {
-        setError('Invalid OTP. Please try again.')
+      // Validate OTP if using email verification
+      if (verificationMethod === 'email' && !otp) {
+        setErrors({ otp: 'Please enter the OTP sent to your email' })
         setIsLoading(false)
         return
       }
 
-      // Validate OTP if using email verification
-      if (verificationMethod === 'email' && otp !== '123456') {
-        setError('Invalid OTP. Please try again.')
-        setIsLoading(false)
-        return
+      // Verify OTP using Supabase API
+      if (otp) {
+        try {
+          const otpResponse = await fetch('/api/otp/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              type: verificationMethod === 'mobile' ? 'sms' : 'email',
+              identifier: verificationMethod === 'mobile' ? formData.mobile : formData.email,
+              otp: otp
+            })
+          })
+
+          const otpResult = await otpResponse.json()
+
+          if (!otpResult.success) {
+            setError(otpResult.error || 'Invalid OTP. Please try again.')
+            setIsLoading(false)
+            return
+          }
+        } catch (err) {
+          console.error('OTP verification error:', err)
+          setError('Failed to verify OTP. Please try again.')
+          setIsLoading(false)
+          return
+        }
       }
 
       // Determine user role based on email
@@ -546,8 +569,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 🎉 Free AI service provided by LuckyChat - no API key needed! Start chatting immediately!
               </p>
               {verificationMethod === 'mobile' && (
-                <p className="text-xs text-orange-600 mt-2">
-                  📱 <strong>Demo Mode:</strong> OTP system is simulated. Use code: 123456
+                <p className="text-xs text-green-600 mt-2">
+                  📱 <strong>Real OTP:</strong> OTP will be sent to your mobile number
+                </p>
+              )}
+              {verificationMethod === 'email' && (
+                <p className="text-xs text-green-600 mt-2">
+                  📧 <strong>Real OTP:</strong> OTP will be sent to your email address
                 </p>
               )}
             </div>
