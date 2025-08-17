@@ -30,7 +30,7 @@ export class SupabaseDatabaseService {
       throw new Error(`Failed to create user: ${error.message}`)
     }
 
-    return data
+    return data as User
   }
 
   /**
@@ -48,7 +48,7 @@ export class SupabaseDatabaseService {
       throw new Error(`Failed to find user: ${error.message}`)
     }
 
-    return data || null
+    return data as User | null
   }
 
   /**
@@ -66,7 +66,7 @@ export class SupabaseDatabaseService {
       throw new Error(`Failed to find user: ${error.message}`)
     }
 
-    return data || null
+    return data as User | null
   }
 
   /**

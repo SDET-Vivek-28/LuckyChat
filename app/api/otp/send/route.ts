@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseDatabase } from '@/lib/supabase-database'
+
+// Simple in-memory OTP storage (in production, use Redis or database)
+const otpStorage = new Map<string, { otp: string; expiresAt: Date; attempts: number }>()
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,12 +25,10 @@ export async function POST(request: NextRequest) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
 
-    // Store OTP in database
-    await supabaseDatabase.storeOTP({
-      identifier,
+    // Store OTP in memory
+    otpStorage.set(identifier, {
       otp,
-      type: type as 'sms' | 'email',
-      expires_at: expiresAt.toISOString(),
+      expiresAt,
       attempts: 0
     })
 

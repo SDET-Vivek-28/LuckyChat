@@ -1,35 +1,66 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Check if we're in a build environment
-const isBuildTime = process.env.NODE_ENV === 'production' && typeof window === 'undefined'
+// Lazy initialization to avoid build-time errors
+let supabaseClient: ReturnType<typeof createClient> | null = null
 
-// Only create client if environment variables are available
-export const supabase = (() => {
-  if (isBuildTime) {
-    // During build time, return a mock client
-    return {} as ReturnType<typeof createClient>
-  }
-  
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Missing Supabase environment variables')
-  }
-  
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true
-    },
-    realtime: {
-      params: {
-        eventsPerSecond: 10
+export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(target, prop) {
+    if (!supabaseClient) {
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+        
+        if (!supabaseUrl || !supabaseAnonKey) {
+          console.error('Missing Supabase environment variables:', {
+            url: supabaseUrl ? 'SET' : 'MISSING',
+            key: supabaseAnonKey ? 'SET' : 'MISSING'
+          })
+          throw new Error('Missing Supabase environment variables')
+        }
+        
+        supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+          auth: {
+            autoRefreshToken: true,
+            persistSession: true,
+            detectSessionInUrl: true
+          },
+          realtime: {
+            params: {
+              eventsPerSecond: 10
+            }
+          }
+        })
+      } catch (error) {
+        console.error('Failed to initialize Supabase client:', error)
+        // Return a mock client that will throw errors when used
+        const mockClient = {
+          from: () => ({
+            insert: () => Promise.reject(new Error('Supabase client not initialized')),
+            select: () => Promise.reject(new Error('Supabase client not initialized')),
+            update: () => Promise.reject(new Error('Supabase client not initialized')),
+            delete: () => Promise.reject(new Error('Supabase client not initialized')),
+            eq: () => Promise.reject(new Error('Supabase client not initialized')),
+            single: () => Promise.reject(new Error('Supabase client not initialized')),
+            rpc: () => Promise.reject(new Error('Supabase client not initialized'))
+          }),
+          auth: {},
+          channel: () => ({}),
+          functions: {},
+          getChannels: () => [],
+          realtime: {},
+          removeAllChannels: () => ({}),
+          removeChannel: () => ({}),
+          rpc: () => Promise.reject(new Error('Supabase client not initialized')),
+          schema: {},
+          storage: {}
+        }
+        return mockClient[prop as keyof typeof mockClient]
       }
     }
-  })
-})()
+    
+    return supabaseClient[prop as keyof typeof supabaseClient]
+  }
+})
 
 // Database table names
 export const TABLES = {
