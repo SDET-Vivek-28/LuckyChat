@@ -44,41 +44,41 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setErrors({})
 
     try {
-      // Validation
-      const newErrors: Record<string, string> = {}
-      
+    // Validation
+    const newErrors: Record<string, string> = {}
+    
       if (isSignUp && !formData.name.trim()) {
-        newErrors.name = 'Name is required'
-      }
-
+      newErrors.name = 'Name is required'
+    }
+    
       if (verificationMethod === 'email') {
-        if (!formData.email.trim()) {
-          newErrors.email = 'Email is required'
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-          newErrors.email = 'Please enter a valid email'
-        }
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email'
+    }
       } else {
         if (!formData.mobile.trim()) {
           newErrors.mobile = 'Mobile number is required'
         } else if (!/^\d{10}$/.test(formData.mobile)) {
           newErrors.mobile = 'Please enter a valid 10-digit mobile number'
-        }
       }
-
-      if (isSignUp) {
-        if (!formData.password) {
-          newErrors.password = 'Password is required'
-        } else if (formData.password.length < 6) {
-          newErrors.password = 'Password must be at least 6 characters'
-        }
-        
-        if (formData.password !== formData.confirmPassword) {
-          newErrors.confirmPassword = 'Passwords do not match'
-        }
+    }
+    
+    if (isSignUp) {
+      if (!formData.password) {
+        newErrors.password = 'Password is required'
+      } else if (formData.password.length < 6) {
+        newErrors.password = 'Password must be at least 6 characters'
       }
+      
+      if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match'
+      }
+    }
 
-      if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors)
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
         setIsLoading(false)
         return
       }
@@ -96,8 +96,15 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         return
       }
 
-      // Verify OTP (in production, verify against sent OTP)
+      // Validate OTP if using mobile verification
       if (verificationMethod === 'mobile' && otp !== '123456') {
+        setError('Invalid OTP. Please try again.')
+        setIsLoading(false)
+        return
+      }
+
+      // Validate OTP if using email verification
+      if (verificationMethod === 'email' && otp !== '123456') {
         setError('Invalid OTP. Please try again.')
         setIsLoading(false)
         return
@@ -155,22 +162,93 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
 
     try {
-      // In production, this would send a real SMS
-      // For demo purposes, we'll simulate it
-      console.log(`Sending OTP to ${formData.mobile}...`)
-      
-      setOtpSent(true)
-      setShowOTP(true)
-      setCountdown(60) // 60 second countdown
+      setIsLoading(true)
       setError('')
       
-      // Show success message for demo
-      setError('✅ Demo OTP sent! Use code: 123456')
-      
-      // Simulate OTP sent successfully
-      console.log('OTP sent successfully! (Demo: Use 123456)')
+      const response = await fetch('/api/otp/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'sms',
+          identifier: formData.mobile
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setOtpSent(true)
+        setShowOTP(true)
+        setCountdown(60) // 60 second countdown
+        
+        // Show success message
+        setError(`✅ ${result.message}`)
+        
+        // In development, show the OTP for testing
+        if (result.otp) {
+          setError(`✅ ${result.message} (Test OTP: ${result.otp})`)
+        }
+      } else {
+        setError(result.error || 'Failed to send OTP. Please try again.')
+      }
     } catch (err) {
+      console.error('OTP Send Error:', err)
       setError('Failed to send OTP. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleSendEmailOTP = async () => {
+    if (!formData.email.trim()) {
+      setErrors({ email: 'Please enter an email address first' })
+      return
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setErrors({ email: 'Please enter a valid email address' })
+      return
+    }
+
+    try {
+      setIsLoading(true)
+      setError('')
+      
+      const response = await fetch('/api/otp/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: 'email',
+          identifier: formData.email
+        })
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        setOtpSent(true)
+        setShowOTP(true)
+        setCountdown(60) // 60 second countdown
+        
+        // Show success message
+        setError(`✅ ${result.message}`)
+        
+        // In development, show the OTP for testing
+        if (result.otp) {
+          setError(`✅ ${result.message} (Test OTP: ${result.otp})`)
+        }
+      } else {
+        setError(result.error || 'Failed to send email OTP. Please try again.')
+      }
+    } catch (err) {
+      console.error('Email OTP Send Error:', err)
+      setError('Failed to send email OTP. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -296,7 +374,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
               {/* Email/Mobile */}
               <div className="space-y-4">
-                <div>
+              <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email/Mobile
                   </label>
@@ -310,7 +388,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      Email
+                  Email
                     </button>
                     <button
                       type="button"
@@ -319,7 +397,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         verificationMethod === 'mobile'
                           ? 'bg-lucky-500 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
+                    }`}
                     >
                       Mobile
                     </button>
@@ -367,25 +445,25 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                         </button>
                       </div>
                     </div>
-                  </div>
+              </div>
                 ) : (
-                  <div>
+                <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       {verificationMethod === 'email' ? 'Email' : 'Mobile'}
-                    </label>
-                    <div className="relative">
+                  </label>
+                  <div className="relative">
                       {verificationMethod === 'email' ? (
                         <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       ) : (
                         <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       )}
-                      <input
+                    <input
                         type="text"
                         value={formData[verificationMethod]}
                         onChange={(e) => handleInputChange(verificationMethod, e.target.value)}
                         className={`w-full pl-12 pr-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-lucky-500 text-base ${
                           errors[verificationMethod] ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                      }`}
                         placeholder={verificationMethod === 'email' ? 'your@email.com' : '1234567890'}
                       />
                     </div>
@@ -394,7 +472,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     )}
                   </div>
                 )}
-              </div>
+                </div>
 
               {/* Password (Sign Up Only) */}
               {isSignUp && (
